@@ -9,7 +9,9 @@ module.exports = {
   "description": "",
   "dest": "public",
   "locales": {
-    '/': { lang: 'zh-CN' }
+    "/": {
+      "lang": "zh-CN",
+    },
   },
   "head": [
     [
@@ -32,7 +34,7 @@ module.exports = {
         "name": "viewport",
         "content": "width=device-width,initial-scale=1,user-scalable=no"
       }
-    ]
+    ],
   ],
   "theme": "reco",
   "themeConfig": {
