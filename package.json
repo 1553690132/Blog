@@ -13,6 +13,8 @@
   },
   "description": "",
   "dependencies": {
-    "@vuepress-reco/vuepress-plugin-bgm-player": "^1.1.4"
+    "@vuepress-reco/vuepress-plugin-bgm-player": "^1.1.4",
+    "vuepress-plugin-cursor-effects": "^1.1.6",
+    "vuepress-plugin-ribbon-animation": "^1.1.3"
   }
 }

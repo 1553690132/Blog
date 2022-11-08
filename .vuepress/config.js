@@ -47,16 +47,5 @@ module.exports = {
   "markdown": {
     "lineNumbers": true
   },
-  "plugins": [
-    "@vuepress-reco/vuepress-plugin-bgm-player", {
-      audios: [
-        {
-          name: '等你下课',
-          artist: '周杰伦',
-          url: './public/bgm/周杰伦 - 等你下课 (with 杨瑞代).mp3',
-          cover: './public/bgm/最伟大的作品.jpg'
-        },
-      ]
-    }
-  ]
+  "plugins": pluginsConf
 }
