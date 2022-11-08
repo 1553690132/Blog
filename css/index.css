@@ -1,0 +1,12 @@
+.sub-sidebar-wrapper li.active,
+.sub-sidebar-wrapper li.active a {
+    background-color: aliceblue
+}
+
+.sub-sidebar-wrapper {
+    font-size: 16px;
+}
+
+.page .page-title {
+    border-bottom: 1px solid #efefef;
+}
