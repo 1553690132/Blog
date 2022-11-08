@@ -4,7 +4,7 @@ const blogConf = require('./config/blogConf')
 const friendConf = require('./config/friendConf')
 
 module.exports = {
-  "base": "./blog/",
+  "base": "/blog/",
   "title": "HM-7 Blog",
   "description": "",
   "dest": "public",
