@@ -5,6 +5,11 @@ tags:
  - Basic
 categories: 
  - HTML
+sidebar: auto
 ---
 
 ## Hello!
+
+# A
+
+### Two

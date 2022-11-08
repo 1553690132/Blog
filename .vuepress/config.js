@@ -1,6 +1,5 @@
 const pluginsConf = require('./config/pluginsConf')
 const navConf = require('./config/navConf')
-const sidebarConf = require('./config/sidebarConf')
 const blogConf = require('./config/blogConf')
 const friendConf = require('./config/friendConf')
 
@@ -21,6 +20,13 @@ module.exports = {
       }
     ],
     [
+      "link",
+      {
+        "rel": "stylesheet",
+        "href": "/css/index.css"
+      }
+    ],
+    [
       "meta",
       {
         "name": "viewport",
@@ -31,7 +37,6 @@ module.exports = {
   "theme": "reco",
   "themeConfig": {
     "nav": navConf,
-    "sidebar": sidebarConf,
     "type": "blog",
     "blogConfig": blogConf,
     "friendLink": friendConf,
