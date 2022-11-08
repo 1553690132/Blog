@@ -4,9 +4,22 @@
 }
 
 .sub-sidebar-wrapper {
-    font-size: 16px;
+    font-size: 16px !important;
 }
 
 .page .page-title {
     border-bottom: 1px solid #efefef;
+}
+
+
+h1 {
+    font-size: 2rem !important;
+}
+
+.home-blog .hero h1 {
+    font-size: 3rem !important;
+}
+
+li .level-3 {
+    font-size: 14px !important;
 }
