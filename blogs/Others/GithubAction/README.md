@@ -78,18 +78,18 @@ jobs:
 ### Token生成
 进入Github(科学上网)，选择个人的setting配置项。
 
-![github 01](/img_git/github1.png)
+![github 01](/blog/img_git/github1.png)
 
 选择 **Person access tokens** 下的 **Token(classic)** 新建Token:
 
-![github 02](/img_git/github2.png)
+![github 02](/blog/img_git/github2.png)
 
 **需要注意，此处的Note最好为ACCESS_Token，且选择repo选项。**
 
 ### 仓库Token配置
 进入到仓库的 **setting** 选项，选择 **secret** 选项卡，进行密钥的配置。
 
-![github 02](/img_git/github3.png)
+![github 02](/blog/img_git/github3.png)
 
 ## 开始部署
 
@@ -102,13 +102,13 @@ git push
 随后打开github，查看Actions选项内是否正常进行了部署。
 
 若为下图所示，则恭喜创建成功!
-![github 02](/img_git/github4.png)
+![github 02](/blog/img_git/github4.png)
 
 
 ## 错误
 
 当然情况总是不尽人意，报错也十有八九。
-![github 02](/img_git/github5.png)
+![github 02](/blog/img_git/github5.png)
 
 这样的报错，可能性有许多。
 ```git
