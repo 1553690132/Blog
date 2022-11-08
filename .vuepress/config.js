@@ -47,5 +47,16 @@ module.exports = {
   "markdown": {
     "lineNumbers": true
   },
-  "plugins": pluginsConf
+  "plugins": [
+    "@vuepress-reco/vuepress-plugin-bgm-player", {
+      audios: [
+        {
+          name: '倒影',
+          artist: '周杰伦',
+          url: './public/bgm/周杰伦 - 倒影.mp3',
+          cover: '/bgm/最伟大的作品.jpg'
+        },
+      ]
+    }
+  ]
 }
