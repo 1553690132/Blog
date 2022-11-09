@@ -4,7 +4,7 @@
 }
 
 .sub-sidebar-wrapper {
-    font-size: 16px !important;
+    font-size: 14px !important;
 }
 
 .page .page-title {
@@ -22,4 +22,11 @@ h1 {
 
 li .level-3 {
     font-size: 14px !important;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-weight: 700 !important;
 }
