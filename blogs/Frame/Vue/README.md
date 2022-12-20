@@ -308,3 +308,36 @@ vm.$watch('isHot', function (newValue, oldValue) {
 * watch能完成的功能，computed不一定能完成，如使用watch实现异步操作。
 :::
 `注意：所有由Vue管理的函数，最好写成普通函数，这样this执行为vm即Vue实例对象。而不被Vue管理的函数（定时器，Ajax回调函数，Promise回调函数等）最好写成箭头函数，这样this才指向vm。`
+
+## 绑定样式
+### 绑定class样式
+**写法：`class="xxx"`xxx可以为字符串、数组或对象。**
+* 字符串适用于类名不确定的情况，需要动态获取。
+* 数组适用于要绑定多个样式，个数与名字均确定，但要动态决定是否使用。
+* 对象适用于要绑定多个样式，个数与名字均不确定。
+
+### 绑定style样式
+**写法：`:style="{fontSize:xxx}"`xxx为动态值。`:style="[a,b,c]"`其中a、b、c为样式对象。**
+
+## 条件渲染
+### v-if **`v-if="xxx" / v-else-if="xxx" / v-else`**
+**适用于低频率变化的场景，不展示的DOM元素直接被移除，v-if和v-else-if和v-else使用时必须相接不能被打断。**
+
+### v-show **`v-show="xxx"`**
+**高频率变化使用v-show，不展示的DOM元素未被移除，仅仅是display：none隐藏掉。**
+
+### template标签 
+**与v-if一起使用，隐藏时会在页面随之隐藏，显示和隐藏均不会存在该节点。**
+```javascript
+<template v-if="n===1">
+            <h1>12</h1>
+            <h2>23</h2>
+</template>
+```
+
+## 列表渲染
+**`v-for`命令：用于展示列表数据。**<br/>
+**语法：`v-for="(item,index)" in "xxx" :key="xxx"`**
+:::tip
+**虚拟DOM中key的作用：<p style="color:'red'">key是虚拟DOM对象的唯一标识。当数据发生变化时，Vue会根据【新数据】生成【新的虚拟DOM】，随后Vue进行【新虚拟DOM】和【旧虚拟DOM】的差异比较。</p>**
+:::
