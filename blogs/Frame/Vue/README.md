@@ -174,3 +174,31 @@ Object.defineProperty(obj2, 'x', {
 * **capture：使用事件的捕获模式**
 * **self：只有当event.target为当前操作元素时才触发事件**
 * **passive：事件默认行为立即执行，无需等待事件执行完毕的回应**
+
+## 键盘事件
+**Vue中常见的键盘别名：**
+* 回车 => enter
+* 删除 => delete
+* 退出 => esc
+* 换行 => tab（必须搭配keydown）
+* 空格 => space
+* 上、下、左、右 => up、down、left、right
+**可以使用`Vue.config.KeyCodes.别名`=`按键的keyCode`来设置别名**
+
+### 系统修饰键
+**`ctrl、alt、shift、meta`等键位**<br/>
+
+**①配合keyup使用，按下修饰键的同时，再按下其它键位，随后释放键位，事件才触发。**<br/>
+**②配合keydown使用，正常触发事件。**
+
+:::tip
+**事件满足链式编程：**
+```html
+<a :href="url" @click.prevent.stop="showInfo">点击提示信息</a>
+```
+**也可以实现系统修饰键的固定触发：**
+```javascript
+<!-- 摁下ctrl+y键触发 -->
+<input type="text" @keyup.ctrl.y="showInfo">
+```
+:::
