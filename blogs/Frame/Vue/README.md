@@ -13,7 +13,7 @@ Vue---具有跨时代意义的渐进式Javascript框架，衍生产品Vuex、Vue
 其特点有：采用组件化编码、提高代码复用率。声明式编码、无需直接操作DOM。采用虚拟DOM和diff算法，尽量复用DOM节点。
 :::
 
-## Vue2入门
+# Vue2入门
 ### 基础知识
 * 使用Vue，必须先创建实例，并传入实例对象。
 * 容器内代码仍符合HTML语法规范。
@@ -202,3 +202,109 @@ Object.defineProperty(obj2, 'x', {
 <input type="text" @keyup.ctrl.y="showInfo">
 ```
 :::
+
+## 计算属性Computed
+**原理：利用Object.defineProperty内置的getter和setter方法。**<br/>
+`get函数执行时机：①在初次获取元素时调用（产生缓存防止重复调用）。②修改数据时调用。`<br/>
+**优势：相对于methods，内部存在缓存机制，效率更高，调试方便。**
+**备注：计算属性会挂载至vm上，直接调用即可。如果计算属性发生修改，则必须去内部编写set方法响应修改，且要修改依赖项的数据。**
+```javascript
+computed: {
+                fullName: {
+                    // 读取时自动调用
+                    // 初次读取和修改时重新调用
+                    get() {
+                        return `${this.firstName}-${this.lastName}`
+                    },
+                    // 修改时自动调用
+                    set(value) {
+                        const arr = value.split('-')
+                        this.firstName = arr[0]
+                        this.lastName = arr[1]
+                    }
+                }
+            }
+```
+**计算属性的简写：当不发生修改时，即无`set`方法时，直接将属性写成方法，并返回值。**
+```javascript
+new Vue({
+            el: '#root',
+            data: {
+                firstName: '张',
+                lastName: '三'
+            },
+            computed: {
+                // 简写:不发生修改
+                fullName() {
+                    return `${this.firstName}-${this.lastName}`
+                }
+            }
+        })
+```
+
+## 监视属性watch
+**当监视的属性发生变化时，回调函数handler调用。handler属性默认为newValue和oldValue。**
+
+### 监视属性写法
+* **new Vue中加入配置项watch进行相关配置（immediate：初始化是否立即执行，handler为变化执行的回调函数）**
+* **使用`vm.$watch`进行配置。`$watch('属性名'，{回调函数}) `**
+
+### 深度监视
+* **Vue中的watch属性默认不检测对象内部的改变。**
+* **配置watch中的deep属性为true即可达到多级监视的目的。**
+```javascript
+new Vue({
+            el: '#root',
+            data: {
+                isHot: true,
+                numbers: {
+                    a: 1,
+                    b: 2,
+                }
+            },
+            methods: {
+                changeWeather() {
+                    this.isHot = !this.isHot
+                }
+            },
+            computed: {
+                info() {
+                    return this.isHot ? '炎热' : '凉爽'
+                }
+            },
+            watch: {
+                // 监视多级解构中某个属性的变化
+                'numbers.a': {
+                    handler(newValue, oldValue) {
+
+                    }
+                },
+                // 监视多级结构中所有属性的变化
+                numbers: {
+                    deep:true,
+                    handler(newValue, oldValue) {
+                        console.log('change');
+                    }
+                }
+            }
+        })
+```
+**监视属性简便写法：不考虑设置immediate和deep时直接将监视属性作为handler函数返回。**
+```javascript
+// 简便写法1：
+ isHot(newValue, oldValue) {
+        console.log('change');
+ }
+
+// 简便写法2：
+vm.$watch('isHot', function (newValue, oldValue) {
+            console.log('change');
+})
+```
+
+:::tip
+**computed和watch的区别：**
+* computed能完成的功能，watch都能完成。
+* watch能完成的功能，computed不一定能完成，如使用watch实现异步操作。
+:::
+`注意：所有由Vue管理的函数，最好写成普通函数，这样this执行为vm即Vue实例对象。而不被Vue管理的函数（定时器，Ajax回调函数，Promise回调函数等）最好写成箭头函数，这样this才指向vm。`
