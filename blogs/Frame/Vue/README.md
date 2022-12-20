@@ -134,3 +134,43 @@ Vue---具有跨时代意义的渐进式Javascript框架，衍生产品Vuex、Vue
 * configurable：是否可被删除（默认为false）
 * **get函数：读取设置属性时默认调用的参数**
 * **set函数：修改设置属性时默认调用的参数**
+
+## 数据代理
+:::tip
+**数据代理**就是指通过一个对象代理对另一个对象的读写操作。
+```javascript
+let obj1 = { x: 100 }
+let obj2 = { y: 200 }
+Object.defineProperty(obj2, 'x', {
+　　　get() {
+      　　return obj1.x
+        },
+     set(value) {
+         obj1.x = value
+         }
+     })
+```
+:::
+### Vue中的数据代理
+**本质：通过实例化对象vm来代理data对象中的读写操作。**<br/>
+
+**原理：通过`Object.defineProperty`方法将data中的属性都挂载至vm身上。并为每一个添加的属性都提供一个getter和setter方法，利用getter与setter去进行读写操作。**
+
+`实例对象vm会自动拥有_data属性，且值为创建时的data值，也为options.data即创建时配置对象的值。`
+
+![数据代理](/blog/img_vue/dl1.png)
+
+
+## 事件处理
+`使用v-on:事件名或@事件名进行事件绑定。`
+* **事件的回调需要配置在methods对象内，最终挂载至vm身上。**
+* **methods中的配置函数，不使用箭头函数。this都指向组件实例对象或vm。**
+* **`@click="demo"`和`@click="demo($event)"`效果一致，后者可以传参。**
+
+### 事件修饰符
+* **prevent：阻止默认事件（e.preventDefault）**
+* **stop：阻止事件冒泡（e.stopPropagation）**
+* **once：事件仅需触发一次**
+* **capture：使用事件的捕获模式**
+* **self：只有当event.target为当前操作元素时才触发事件**
+* **passive：事件默认行为立即执行，无需等待事件执行完毕的回应**
