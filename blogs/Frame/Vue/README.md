@@ -541,3 +541,82 @@ vm.$watch('isHot', function (newValue, oldValue) {
         })
     </script>
 ```
+
+## Vue.set/Vue.$set
+**参数（实例对象的某一属性名，属性名，属性值）**
+**用于给实例化Vue对象的某一个属性对象动态添加子属性。**<br/>
+**`不允许直接给实例化对象添加属性。即参数第一项不能为vm实例对象本身或是vm的根数据对象（即data/vm._data）`**
+```js
+<script>
+        const vm = new Vue({
+            data: {
+                name: 'LWH',
+                message: {
+                    age: 18,
+                }
+            }
+        })
+        // 对vm上的messgae对象添加属性是允许的
+        Vue.set(vm.message, 'sex', '男')
+        // 或者为
+        vm.$set(vm.message, 'sex', '男')
+
+        // 直接在vm的data内创建新属性是不行的
+        Vue.set(vm, 'sex', '男')
+    </script>
+```
+
+## Vue监测数据
+**Vue会监视data中所有层次的数据。**<br/>
+
+**监测对象中数据：通过setter实现监视，且在new Vue时就传入要监测的数据。**
+* 对象中后追加的属性，Vue不做响应式处理。
+* 如需给后添加的属性增加响应式，需要使用Vue.set和vm.$set方法实现。
+
+**监测数组中数据：通过包裹数组更新元素的方法实现，本质为：**
+* 调用原生对应的方法对数组进行更新。
+* 重新解析模板，进而更新页面。
+
+### 在Vue中修改数组的某个元素方法
+* **使用改变原数组的方法：push、pop、splice、shift、unshift、sort、reverse**
+* **使用Vue.set和vm.$set方法**
+* **若想使用不改变原数组的filter，slice，concat等方法，需要使用新数组覆盖旧数组**
+
+## 数据劫持
+**实例化Vue对象时传入的`data`经过处理后以`getter`和`setter`的形式进行管理的过程。后续对属性进行读改都要经过`setter`和`getter`处理。**
+
+## 收集表单数据
+* **若类型为text表单，v-model收集用户输入的value值。**
+* **若类型为radio，则需要配置value属性，配合v-model使用。**
+* **若类型为checkbox，在未配置value时v-model默认收集checked属性(是否选中)。如果有多个checkbox，则用数组进行取值。**
+* **v-model的修饰符：number转化为数值类型，lazy失去焦点再获取数据，trim去除首尾空格。**
+
+## 过滤器
+**对要显示的数据进行特定格式化后再显示（仅适用于简单的逻辑处理）**<br/>
+
+**语法：**
+* **注册过滤器：(全局) `Vue.filter(过滤器名，回调函数)`、(局部) `new Vue({filters：函数})`**
+* **使用过滤器：`{{xxx | 过滤器名}}` 或 `v-bind:属性="xxx | 过滤器名"`**
+
+**备注：**
+* **多滤器接受默认参数为调用属性，也可以接受额外参数，多个过滤器间可以串联。**
+* **过滤器不会改变原数据，是产生新的对应数据。**
+
+```html
+<!-- 过滤器实现 -->
+<h3>{{time | timeFormat | myslice}}</h3>
+<h3 :x="time | myslice"></h3>
+
+<script>
+// 定义全局过滤器
+        Vue.filter('myslice', function (value) {
+            return value.slice(0, 3)
+        })
+// 局部过滤器
+        filters: {
+            timeFormat(value, str = "YYYY-MM-DD HH:mm:ss") {
+                return dayjs(value).format(str)
+             },
+          }
+</script>
+```
