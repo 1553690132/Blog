@@ -341,3 +341,203 @@ vm.$watch('isHot', function (newValue, oldValue) {
 :::tip
 **虚拟DOM中key的作用：<p style="color:'red'">key是虚拟DOM对象的唯一标识。当数据发生变化时，Vue会根据【新数据】生成【新的虚拟DOM】，随后Vue进行【新虚拟DOM】和【旧虚拟DOM】的差异比较。</p>**
 :::
+
+## diff算法
+**新旧虚拟DOM比较规则：**<br/>
+**（1）旧虚拟DOM中找到了与新虚拟DOM相同的key值：**<br/>
+* **若新虚拟DOM中内容没变，则直接使用之前生成的真实DOM。**
+* **若新虚拟DOM中内容变化了，则直接生成新的真实DOM，随后替换掉之前生成的旧真实DOM。**<br/>
+
+**（2）旧虚拟DOM中未找到和新虚拟DOM相同的key值：则直接生成新的真实DOM，渲染至页面。**
+:::tip
+**`v-for`不使用`index`作为`key`的问题：若使用index且对数据进行：逆序添加、逆序删除等破坏顺序的操作，会产生没有必要的真实DOM更新，造成效率低下。如果结构中还包含输入类DOM则会产生错误的真实DOM更新，造成页面渲染出错。**
+:::
+
+### 筛选列表事例
+* **使用监视属性实现时，改变的是页面遍历的数组。故设立一个新数组于data中。handler进行筛选改变，需要immediate立即执行。**
+```html
+<div id="root">
+        <h2>人员列表</h2>
+        <input type="text" placeholder="请输入名字" v-model="keyWord">
+        <ul>
+            <li v-for="(p,index) in filPersons" :key="p.id">
+                {{p.name}}-{{p.age}}
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        // 利用 watch实现
+        new Vue({
+            el: '#root',
+            data: {
+                keyWord: '',
+                persons: [
+                    {
+                        id: 001,
+                        name: '马冬梅',
+                        age: 18,
+                        gender: '女'
+                    },
+                    {
+                        id: 002,
+                        name: '周冬雨',
+                        age: 20,
+                        gender: '女'
+                    },
+                    {
+                        id: 003,
+                        name: '周杰伦',
+                        age: 30,
+                        gender: '男'
+                    },
+                    {
+                        id: 004,
+                        name: '温兆伦',
+                        age: 35,
+                        gender: '男'
+                    }
+                ],
+                // 存放新数据
+                filPersons: []
+            },
+            watch: {
+                keyWord: {
+                    immediate: true,
+                    handler(value) {
+                        this.filPersons = this.persons.filter(p => {
+                            return p.name.indexOf(value) !== -1
+                        })
+                    }
+                }
+            }
+        })
+    </script>
+```
+
+* **使用计算属性实现时，将页面要展现的新数组计算出来。设置新的数组作为计算属性，直接对其进行get方法改变即可。**
+```html
+<div id="root">
+        <h2>人员列表</h2>
+        <input type="text" placeholder="请输入名字" v-model="keyWord">
+        <ul>
+            <li v-for="(p,index) in filPersons" :key="p.id">
+                {{p.name}}-{{p.age}}
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        // 利用 computed实现
+        new Vue({
+            el: '#root',
+            data: {
+                keyWord: '',
+                persons: [
+                    {
+                        id: 001,
+                        name: '马冬梅',
+                        age: 18,
+                        gender: '女'
+                    },
+                    {
+                        id: 002,
+                        name: '周冬雨',
+                        age: 20,
+                        gender: '女'
+                    },
+                    {
+                        id: 003,
+                        name: '周杰伦',
+                        age: 30,
+                        gender: '男'
+                    },
+                    {
+                        id: 004,
+                        name: '温兆伦',
+                        age: 35,
+                        gender: '男'
+                    }
+                ],
+            },
+            computed: {
+                filPersons() {
+                    return this.persons.filter(e => {
+                        return e.name.indexOf(this.keyWord) !== -1
+                    })
+                }
+            }
+        })
+    </script>
+```
+
+### 排序列表事例
+**给各排序按钮设置事件改变定义的`sortType`属性，在计算属性内部进行判断是否需要进行重排序，由于计算属性触发时机为依赖属性改变故总会随按钮点击而变化。**
+```html
+<div id="root">
+        <h2>人员列表</h2>
+        <input type="text" placeholder="请输入名字" v-model="keyWord">
+        <button @click="sortType=0">年龄升序</button>
+        <button @click="sortType=1">年龄降序</button>
+        <button @click="sortType=2">原顺序</button>
+        <ul>
+            <li v-for="(p,index) in filPersons" :key="p.id">
+                {{p.name}}-{{p.age}}
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#root',
+            // 0为原顺序，1为降序，2为升序
+            data: {
+                keyWord: '',
+                sortType: 0,
+                persons: [
+                    {
+                        id: 001,
+                        name: '马冬梅',
+                        age: 28,
+                        gender: '女'
+                    },
+                    {
+                        id: 002,
+                        name: '周冬雨',
+                        age: 20,
+                        gender: '女'
+                    },
+                    {
+                        id: 003,
+                        name: '周杰伦',
+                        age: 30,
+                        gender: '男'
+                    },
+                    {
+                        id: 004,
+                        name: '温兆伦',
+                        age: 35,
+                        gender: '男'
+                    }
+                ],
+            },
+            // 计算属性的依赖属性改变时也会重新执行！
+            computed: {
+                filPersons() {
+                    const arr = this.persons.filter(e => {
+                        return e.name.indexOf(this.keyWord) !== -1
+                    })
+                    // 判断是否需要排序
+                    if (this.sortType) {
+                        this.sortType === 1 ? arr.sort((x, y) => {
+                            return x.age - y.age
+                        }) : arr.sort((x, y) => {
+                            return y.age - x.age
+                        })
+                    }
+                    return arr
+                }
+            }
+        })
+    </script>
+```
