@@ -642,3 +642,50 @@ vm.$watch('isHot', function (newValue, oldValue) {
 
 **v-html安全性问题：在网站动态渲染HTML结构容易导致XSS攻击(冒充用户之手)，仅在可信任内容使用，不能用于用户提交内容。**
 :::
+
+## 自定义指令
+**函数式/对象式：**
+```js
+// 函数式
+directives: {
+                // 指令与元素成功绑定时执行。
+                // 指令所在模板被重新解析时也执行，
+                big(element, binding) {
+                    element.innerText = binding.value * 10
+                }
+            }
+
+// 对象式
+directives: {
+                fbind: {
+                    // 指令与元素成功绑定时执行(初始化时)
+                    bind(element, binding) {
+                        element.value = binding.value
+                    },
+                    // 指令所在元素被插入页面时调用
+                    inserted(element) {
+                        element.focus()
+                    },
+                    // 指令所在模板被重新解析时
+                    update(element, binding) {
+                        element.value = binding.value
+                        element.focus()
+                    }
+                }
+            }
+```
+**全局自定义指令：`Vue.directive(指令名，回调函数)` 或 `Vue.directive(指令名，配置对象)`**
+
+**配置对象中常用的三个回调函数：**
+* **`bind`：指令与元素成功绑定后调用（初始化）**
+* **`inserted`：指令所在元素被插入页面后调用**
+* **`update`：指令所在模板结构重新解析时调用**<br/>
+
+`故函数式自定义相当于配置对象的bind函数和update函数的合体形式。`<br/>
+
+:::tip
+**指令定义时不加v-，使用时加。若指令名指定多个单词，要用短横杠链接法命名。**
+:::
+
+
+## 生命周期
