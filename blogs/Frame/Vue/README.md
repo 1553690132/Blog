@@ -720,3 +720,92 @@ directives: {
 * **定义组件：`Vue.extend(options)`创建，在`options`内部不能写`el`(组件都需要经过vm统一管理和分配)，`data`必须写成函数模式，避免组件复用时数据存在引用关系。**
 * **注册组件：局部注册：new Vue时创建的`components`属性。全局注册：`Vue.component('组件名'，组件)`**
 * **使用组件(直接在页面写组件标签)**  
+
+### 注意点
+#### 组件命名
+* **一个单词：首字母大写或首字母小写**
+* **多个单词：短横线命名（school-name）或大驼峰命名（SchoolName）需要Vue脚手架支持**
+* **可以在组件内部定义name配置项指定组件在开发者工具中呈现的名字**
+
+#### 组件标签
+* **`<school></school>`写法**
+* **`<school/>`写法：若不在Vue脚手架环境下，则该种写法会导致后续组件不能渲染。**
+
+#### 定义简写
+**`const xxx = Vue.extend(options)` 可简写为 `const xxx = options`**
+
+```js
+const person = {
+            data() {
+                return {
+                    name: 'LWH',
+                    age: 18
+                }
+            },
+            template: `
+            <div>
+                <h1>name: {{name}}</h1>
+                <h2>age: {{age}}</h2>
+            </div>
+            `,
+  }
+```
+
+### 组件嵌套
+**可以在组件内部再次注册组件，利用app组件管理所有子组件。**
+```js
+        const student = Vue.extend({
+            template: `<div>
+                <h2>{{name}}</h2>
+                <h2>{{age}}</h2>
+            </div>`,
+            data() {
+                return {
+                    name: 'LWH',
+                    age: 22
+                }
+            }
+        })
+        const school = Vue.extend({
+            template: `<div>
+                <h2>{{name}}</h2>
+                <h2>{{address}}</h2>
+                <student></student>
+            </div>`,
+            data() {
+                return {
+                    name: 'HNU',
+                    address: 'HRB'
+                }
+            },
+            components: {
+                student
+            }
+        })
+        const hello = Vue.extend({
+            template: `<h2>Hello {{name}}</h2>`,
+            data() {
+                return {
+                    name:'LWH'
+                }
+            }
+        })
+        // 管理所有组件的组件
+        const app = Vue.extend({
+            template: `<div>
+                    <school></school>
+                    <hello></hello>
+                </div>`,
+            components: {
+                school,
+                hello
+            }
+        })
+        new Vue({
+            el: '#root',
+            components: {
+                app
+            },
+            template:`<app></app>`
+        })
+```
