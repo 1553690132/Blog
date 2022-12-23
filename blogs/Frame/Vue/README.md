@@ -809,3 +809,117 @@ const person = {
             template:`<app></app>`
         })
 ```
+
+## VueComponent
+**① 组件本质为VueComponent的构造函数，由Vue.extend(options)生成。**<br/>
+
+**② 编写组件标签时，Vue会自动创建组件的实例对象，即执行new VueComponent(options)。**<br/>
+
+**③ 每次调用Vue.extend，生成的都是全新的VueComponent。**<br/>
+
+**④ this指向的变化：**
+* **组件配置中，data函数，methods函数，watch函数，computed函数等的this，均指向VueComponent实例对象。**
+* **new Vue(options)中的以上函数，this指向为Vue实例对象。**
+:::tip
+**组件和Vue实例接收相同的配置项（data、methods、生命周期钩子等），但el配置项组件不能配置。**<br/>
+
+**`VueComponent.prototype.__proto__ = Vue.prototype`**
+:::
+
+![VueComponent](/blog/img_vue/vuecomponent.png)
+
+## 单文件组件
+**一个文件仅包含一个组件（常用编码形式）**
+### 文件结构
+**① 子组件.vue：**
+```js
+<template>
+  <div id="school">
+    // 模板结构
+  </div>
+</template>
+
+<script>
+// 子组件配置
+export default {
+  name:'School',
+  data() {
+    return {
+      name:'HNU',
+      address:'HAERBIN'
+    }
+  },
+};
+</script>
+<style>
+// 结构渲染
+  #school {
+    color: skyblue;
+  }
+</style>
+```
+
+**② 入口文件main.js：导入App.vue并声明new Vue**
+```js
+// 入口文件
+import App from './App.vue'
+
+new Vue({
+    el: '#root',
+    components: { App },
+    template: '<App></App>'
+})
+```
+
+**③ 统一管理子组件的App.vue：**
+```js
+// App.vue 负责管理所有组件
+<template>
+  <div>
+    <School></School>
+    <Student></Student>
+  </div>
+</template>
+
+<script>
+import School from "./School.vue";
+import Student from "./Student.vue";
+export default {
+  components: {
+    School,
+    Student,
+  },
+};
+</script>
+
+<style>
+</style>
+```
+
+**④ 展示页面index.html：此时无法运行，需要引入脚手架Vue-CLI**
+
+## Vue脚手架 Vue CLI（command line interface）
+
+### 脚手架安装
+* **全局安装@vue/cli：`npm i -g @vue/cli`**
+* **切换到要创建项目的目录，`vue create xxx`**
+* **启动项目：`npm run serve`**
+
+### 关于不同版本的vue
+**① `vue.js`是完整版的vue，包含核心功能+模板解析器。**<br/>
+
+**② `vue.runtime.xxx.js`是运行版的vue，只包含核心功能，没有模板解析器。**<br/>
+
+**由于vue.runtime.xxx.js没有模板解析器，故不能使用template配置项，需要使用render函数接受createElement函数去指定具体内容。**
+
+## Render函数
+**字符串模板的代替函数**
+* **接受`createElement`函数，该函数接受参数，创建一个模板。**
+* **Vue 选项中的`render`函数若存在，则 Vue 构造函数不会从 `template`选项或通过`el`选项指定的挂载元素中提取出的 HTML 模板编译渲染函数。**
+
+```js
+new Vue({
+    // 将App组件放入容器中
+    render: h => h(App),
+}).$mount('#app')
+```
