@@ -923,3 +923,9 @@ new Vue({
     render: h => h(App),
 }).$mount('#app')
 ```
+
+### 修改默认配置
+**使用vue > output.js 可以查看到Vue脚手架的默认配置。在`vue.config.js`中进行修改。eg：`lintOnSave：false` //关闭语法检查**
+
+### 脚手架文件结构
+![文件结构](/blog/img_vue/jg.png)
