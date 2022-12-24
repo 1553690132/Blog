@@ -936,8 +936,113 @@ new Vue({
 * **使用方法：标签内命名`ref = "xxx"`使用`this.$refs.xxx`进行获取。**
 
 ## props配置项
-**让组件接收外部传入的数据**
-* **传递数据：`<Demo xxx="xxx">`**
-* **接收数据：**
+* **让组件接收外部传入的数据**
+* **传递数据：`<Demo xxx="xxx">`**<br/>
+
+**接收数据：**
+* **仅接收数据：**
+```js
+ // 简单声明接收,
+  props: ["name", "sex", "age"],
+```
+* **限制类型接收：**
+```js
+// 接收同时对数据进行类型限制
+  props: {
+    name: String,
+    age: Number,
+    sex: String,
+  },
+```
+* **限制类型，设置默认值，限制必要性：type、default、required**
+```js
+// 接收的同时对数据进行类型限制+默认值指定+必要性限制
+  props: {
+    name: {
+      type: String,
+      required: true, //名字是必填项
+    },
+    age: {
+      type: Number,
+      default: 99, // 默认值
+    },
+    sex: {
+      type: String,
+      required: true,
+    },
+  },
+```
+* **整体流程**
+```js
+----------App.vue-------------
+<template>
+  <div>
+    <Student name="LWH" :age="18" sex="男" />
+  </div>
+</template>
+....
+
+---------Student.vue------------
+<script>
+export default {
+  ......
+  // 简单声明接收,
+  props: ["name", "sex", "age"],
+};
+</script>
+```
+**备注：props属性是`只读`的，Vue底层会监测对props的修改，若进行修改会发出警报。若业务需要修改，则需复制props中的属性至data中，直接使用复制后的属性并对其进行操作。**
+
 
 ## mixin混入
+**新建mixin.js文件用于把多个组件共用的配置提取为一个混入对象。**
+* **定义混合**
+```js
+export const hunhe = {
+    methods: {
+        showName() {
+            alert(this.name);
+        }
+    },
+    mounted() {
+        console.log('Hello Vue!');
+    },
+}
+```
+
+* **使用混合**<br/>
+
+**全局使用：**
+```js
+----------main.js------------
+import { hunhe1, hunhe2 } from '../mixin';
+Vue.mixin(hunhe1)
+Vue.mixin(hunhe2)
+```
+**局部使用：**
+```js
+---------component.vue---------
+import { hunhe1, hunhe2 } from "../mixin";
+export default {
+  .....
+  mixins: [hunhe1, hunhe2],
+};
+```
+
+## Vue插件
+**新建plugins.js用于增强Vue（配置Vue：filter、mixin、directive等）**
+* **定义插件**
+```js
+对象.install = function(Vue, options) {
+　　添加全局过滤器：Vue.filer()...
+　　添加全局指令：Vue.directive()...
+　　配置全局混入：Vue.mixin()
+　　添加实例方法：Vue.prototype.xxx = ...
+.....
+}
+```
+* **使用插件：在`main.js`中引入，使用`Vue.use`注册。**
+
+## scoped样式
+**让样式在局部生效，防止冲突。(原理为给相同的class组件设置不同的属性值，通过属性选择器修改样式)**<br/>
+**写法：`<style scoped>`**
