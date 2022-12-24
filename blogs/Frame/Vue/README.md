@@ -1046,3 +1046,33 @@ export default {
 ## scoped样式
 **让样式在局部生效，防止冲突。(原理为给相同的class组件设置不同的属性值，通过属性选择器修改样式)**<br/>
 **写法：`<style scoped>`**
+
+## 组件自定义事件
+**组件间通信方式，适用于子组件传值给父组件。**<br/>
+
+**使用场景：A为父组件，B为子组件。若B想给A传值，则需在A中给B绑定事件。事件的回调要在父组件A中！**<br/>
+
+**绑定：均在父组件中进行绑定，methods进行定义方法。**<br/>
+
+* **`v-on/@xxx`：直接进行绑定，名称为methods中方法名**
+```js
+<Demo v-on:test="test" />
+// 简写形式
+<Demo @test="test" />
+```
+* **`ref+$on`：`$on("事件名"，事件)`：对组件进行ref命名，使用生命周期钩子mounted内`this.$refs.命名.$on`进行绑定**
+```js
+<template>
+    <Demo ref="demo"/>
+</template>
+
+<script>
+export default {
+    mounted() {　　　　　// test 方法在 methods 中已定义
+        this.$refs.demo.$on("test", this.test)
+  },
+};
+</script>
+```
+`若想只让自定义事件执行一次则使用$once或绑定时使用事件修饰符.once`
+
