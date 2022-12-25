@@ -1090,3 +1090,44 @@ export default {
 **注意：**
 使用`$on`进行事件绑定时：`this.$refs.demo.$on("test"，回调)`，回调函数的定义要么在`methods`中定义在此调用，要么使用箭头函数直接定义，否则`this`指向会有问题。
 
+## 全局事件总线
+**实现任意组件间通信**<br/>
+
+**原理：利用一个公共区域，进行所有组件的事件管理。运行所有组件访问且拥有自定义事件的`$on、$off、$emit`方法。**
+
+:::tip
+**利用`Vue.prototype = VueComponent.prototype.__proto__`的特性，将全局事件总线`$bus`绑定至vm身上，后续所有组件均可通过原型链访问到公共事件。这里绑定在vm身上要在`beforeCreate`中进行，这是因为此时模板尚未解析，若在此之后定义，即组件解析完毕再进行绑定会导致子组件调用产生未定义事件总线的错误。**
+:::
+
+### 安装全局事件总线
+```js
+new Vue({
+  render: h => h(App),
+  // 妙处
+  beforeCreate() {
+    Vue.prototype.$bus = this // 安装全局事件总线
+  },
+}).$mount('#app')
+```
+
+### 使用事件总线
+* **使用数据：若A组件想接收数据，则在A中给`$bus`绑定方法，事件的回调将留在A组件自身。**
+```js
+methods: {
+  demo(data) {
+    .....
+  }
+},
+mounted() {
+  this.$bus.$on('事件名', this.demo)
+},
+```
+* **提供数据：调用`this.$bus.emit('事件名'，数据)`**
+```js
+methods: {
+  demo() {
+    this.$bus.$emit('事件名', 数据)
+  }
+},
+```
+**注意：最好在`beforeDestroy`生命周期钩子中`$off`解绑事件。**
