@@ -1131,3 +1131,54 @@ methods: {
 },
 ```
 **注意：最好在`beforeDestroy`生命周期钩子中`$off`解绑事件。**
+
+## 消息订阅与发布pubsub
+**实现任意组件间通信**<br/>
+### 使用步骤
+* **安装pubsub-js：`npm i pubsub-js`**
+* **引入：`import pubsub from 'pubsub-js'`**
+* **订阅消息：使用pubsub自带的`subscribe`方法**
+```js
+methods: {　// subscribe的回调函数参数默认为消息名和数据！
+  demo(msgName，data) {
+    ...
+  }
+}
+mounted() {
+  this.pubId = pubsub.subscribe("消息名", this.demo)
+},
+```
+* **提供数据：`pubsub.publish('消息名',数据)`**
+* **取消消息订阅：在`beforeDestroy`中进行，利用消息订阅时产生的`pubId`进行取消！`pubsub.unsubscribe(this.pubId)`**<br/>
+
+**注意：由于消息订阅的回调函数参数为消息名和数据。则一般将消息名写为_代表占位。**
+
+## $nextTick
+**用于在下次DOM更新循环结束之后执行延迟回调。在修改数据后立即调用该方法，获取更新后的DOM。**
+* **使用：`this.$nextTick(回调函数)`**
+* **作用：在下一次DOM更新完成后执行其指定的回调。**
+* **使用时机：当改变数据后，要基于更新后的新DOM进行某些操作时，要在`$nextTick`所指定的回调函数中运行。**
+
+## 过渡与动画
+**插入、更新、移除DOM元素时，在合适的时候给元素添加样式类名。**<br/>
+
+![过渡与动画](/blog/img_vue/gddh.png)
+
+**写法：若使用动画则可直接用`v-enter-active`和`v-leave-active`调用动画，若使用过渡则用`v-enter`、`v-enter-to`、`v-leave`、`v-leave-to`分别定义。**
+
+**① 准备样式：**<br/>
+**元素进入样式：**
+* **`v-enter`：进入的起点（定义过渡）**
+* **`v-enter-active`：进入的过程（一般在此直接使用动画）**
+* **`v-enter-to`：进入的终点（定义过渡）**
+
+**元素离开样式：**
+* **`v-leave`：离开的起点**
+* **`v-leave-active`：离开的过程**
+* **`v-leave-to`：离开的终点**
+
+**`进入的起点和离开的终点，进入的终点和离开的起点，为轮回，可以定义相同内容。`**
+
+**② 使用`<transition>`包裹需要过渡的元素，并配置name属性。**
+
+**③ 若有多个需要过渡的元素。则使用`<transition-group>`进行包裹，且内置元素需要设置`key`值。**
