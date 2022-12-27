@@ -1182,3 +1182,126 @@ mounted() {
 **② 使用`<transition>`包裹需要过渡的元素，并配置name属性。**
 
 **③ 若有多个需要过渡的元素。则使用`<transition-group>`进行包裹，且内置元素需要设置`key`值。**
+
+:::tip
+**处理跨域问题：**
+* **cors**
+* **JSONP**
+* **配置代理服务器**
+:::
+
+## 配置代理
+**均在`vue.config.js`中进行配置**
+
+**方法一：直接定义代理服务器转发地址`proxy`，客户端请求url为代理服务器地址**
+```js
+devServer: {
+     proxy: 'http://localhost:5000'
+},
+```
+**优点：配置简单，请求资源时直接发给前端(8080)即可。**<br/>
+**缺点：不能配置多个代理，不能灵活的控制请求是否通过代理。**<br/>
+**工作方式：（有限匹配前端资源）当请求了前端不存在的资源时，请求会转发给服务器。**
+
+**方法二：**
+```js
+devServer: {
+  proxy: {
+    '/代理服务器响应头': {
+        target: '代理目标的地址',
+        pathRewrite: { '^/代理服务器响应头': '/' }, //匹配所有拥有代理服务器响应头的url，把响应头去除，防止404
+        ws: true, //支持websocket
+        changeOrigin: true // 控制隐藏请求头中的 host值
+    }
+  }
+}
+```
+**优点：可以配置多个代理，且可以灵活控制请求是否通过代理。（只需在请求的url处选择是否添加代理服务器的响应头）**<br/>
+**缺点：配置繁琐，请求资源时必须加前缀。**
+
+## Vue-resource
+**Vue插件，用于给Vue和VueComponent增加`$http`属性，实现与`axios`一样的功能。**
+
+## Slot插槽
+**让父组件向子组件指定位置插入html结构，也是组件间通信的方式，适用于`父组件=>子组件`。**
+### 默认插槽
+**直接使用插槽**
+```js
+// 默认插槽
+-----父组件
+<Demo>
+  <template>
+    <div>html结构</div>
+  </template>
+</Demo> 
+
+-----子组件
+<template>
+  <div>
+    <slot>默认插槽</slot>
+  </div>
+</template>
+```
+
+### 具名插槽
+**定义name，选择配对使用插槽（`slot="插槽名"`或`v-slot：插槽名`）**
+```js
+// 具名插槽
+-----父组件
+<Demo>
+  // 方式一: slot属性指定插槽名
+  <template slot="slot1">
+    <div>html结构</div>
+  </template>
+  // 方式二: v-slot属性指定插槽名
+  <template v-slot:slot2>
+    <div>html结构</div>
+  </template>
+</Demo> 
+
+-----子组件
+<template>
+  <div>
+    <slot name="slot1">具名插槽</slot>
+    <slot name="slot2">具名插槽</slot>
+  </div>
+</template>
+```
+
+### 作用域插槽
+**数据在组件自身，但根据数据生成的结构需要组件的使用者来决定。（数据在B组件中，但使用数据遍历出的结构需要A组件来决定）**
+
+:::tip
+**`slot-scope`或`scope`指定数据，这里均可用解构赋值取出数据。**<br/>
+**`scope`现已废弃，推荐使用`slot-scope`!**
+:::
+
+```vue
+// 作用域插槽
+-----父组件
+<Demo>
+  // 方式一:
+  <template scope="data">
+    <ul>
+      <li v-for="item in data" :key="data.id" >{{item}}</li>
+    </ul>
+  </template>
+  // 方式二:
+  <template slot-scope="data">
+    <ul>
+      <li v-for="item in data" :key="data.id" >{{item}}</li>
+    </ul>
+  </template>
+</Demo> 
+
+-----子组件
+<template>
+  <div>
+    <slot :data="data"></slot>
+  </div>
+</template>
+```
+**注意：`v-slot`和`scope`与`slot-scope`不能一起使用！ `v-slot`可以直接达到指定插槽名与接收作用域数据的目的！**
+
+**`v-slot:插槽名=数据`（这里也可以使用解构赋值即：`v-slot:插槽名={具体数据}`）**
+
