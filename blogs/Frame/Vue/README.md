@@ -1226,7 +1226,7 @@ devServer: {
 **让父组件向子组件指定位置插入html结构，也是组件间通信的方式，适用于`父组件=>子组件`。**
 ### 默认插槽
 **直接使用插槽**
-```js
+```vue
 // 默认插槽
 -----父组件
 <Demo>
@@ -1245,7 +1245,7 @@ devServer: {
 
 ### 具名插槽
 **定义name，选择配对使用插槽（`slot="插槽名"`或`v-slot：插槽名`）**
-```js
+```vue
 // 具名插槽
 -----父组件
 <Demo>
@@ -1305,3 +1305,245 @@ devServer: {
 
 **`v-slot:插槽名=数据`（这里也可以使用解构赋值即：`v-slot:插槽名={具体数据}`）**
 
+## Vuex
+**在Vue中实现集中式状态（数据）管理的插件，对vue中多个组件的共享状态进行集中式的管理（读/写）是专为Vue.js应用开发的状态管理模式+库。可实现任意组件间通信。**
+
+### 多组件共享数据
+**多组件共享数据，使用全局事件总线，重复方法过多来回读写数据造成冗余。**
+
+![多组件1](/blog/img_vue/dzj1.png)
+![多组件2](/blog/img_vue/dzj2.png)
+
+### 使用Vuex时机
+* **多个组件依赖于同一个状态。**
+* **来自不同组件的行为需要变更同一状态。**
+
+### Vuex工作原理
+![vuex](/blog/img_vue/vuex.png)
+
+### 搭建Vuex环境
+**① 创建文件src/store/index.js：使用`new Vuex.Store({state，actions，mutations})`创建vuex核心store实例**
+```js
+// 用于创建 vuex 中核心 store
+// 引入vuex
+import Vuex from 'vuex'
+// 应用vuex插件
+import Vue from 'vue'
+Vue.use(Vuex)
+// 准备actions:响应组件中的动作
+const actions = {}
+// 准备mutations:用于操作数据(state)
+const mutations = {}
+// 准备state:用于存储数据
+const state = {}
+
+// 创建并暴露store 
+export default new Vuex.Store({
+    actions,
+    mutations,
+    state
+})
+```
+**注意：创建`vuex`的`store`属性，必须先进行`vue.use`使用，由于`import`会在最先进行。故需要在`index.js`中创建`vue实例use`，而不能在入口文件`main.js`中进行`use`！**
+
+**② 在`main.js`中导入并配置store**
+```js
+import Vue from "vue";
+import App from './App.vue'
+// 引入store
+import store from './store/index'
+
+Vue.config.productionTip = falsenew Vue({
+    render: h => h(App),
+    store,
+}).$mount('#app')
+```
+
+### Vuex基本使用
+**① 初始化数据、配置state、配置actions、配置mutations、操作文件store.js**
+```js
+// 配置state存储数据
+const state = {data}
+// 响应组件中发起的动作
+const actions = {
+    demo(context, value) {
+        context.commit('DEMO', value)
+    }
+}
+// 操作响应actions发起的请求,操作实际数据
+const mutations = {
+    DEMO(state, value) {
+        state.data = ....
+    }
+}
+```
+**② 组件读取Vuex中的数据：**
+* 在模板中：`$store.state.data`
+* 在组件配置中：`this.$store.state.data`
+
+**③ 组件中修改Vuex中的数据：`$store.dispatch('action中的方法名',数据)`和`$store.commit('mutations中的方法名'，数据)`**
+
+**注意：若没有网络请求(ajax)或其他业务逻辑，组件也可直接越过actions，直接访问mutations。**
+
+## getters配置项
+**加工state中的数据进行使用（类似于computed）`getters和state的关系类似于data和computed`**
+
+**配置：**
+```js
+const getters = {
+  demo() {
+    return ...
+  }
+},
+export default new vuex.Store({
+  ...
+  getters,
+})
+```
+**组件中读取：`$store.getters.xxx`**
+
+## 四大map方法
+**用于优化组件中的computed和methods**
+
+***配置时均需要使用`...`剩余运算符，将四种map方法内的值结构至配置项内。***
+
+### mapState
+**映射state中的数据转化为组件的计算属性。**
+```js
+computed: {
+  // 对象写法
+  ...mapState({
+    demo1:'demo1',
+    demo2:'demo2'
+  })
+  // 数组写法(同名)
+  ...mapState(['demo1', 'demo2'])
+}
+```
+**数据加引号：意为去`state`中寻找同名属性，若不加引号则在当前组件中寻找属性则报错。**
+
+### mapGetters
+**映射getters中的数据转化为组件中的计算属性。**
+```js
+computed: {
+  // 对象写法
+  ...mapGetters({
+    demo1:'demo1',
+    demo2:'demo2'
+  })
+  // 数组写法(同名)
+  ...mapGetters(['demo1', 'demo2'])
+}
+```
+
+### mapActions
+**用于生成和actions对话的方法，即调用`$store.dispatch`方法。**
+```js
+methods: {
+  ...mapActions({
+    demo:'demo'
+  })
+  ...mapActions(['demo'])
+},
+```
+
+### mapMutations
+**用于生成和mutations对话的方法，即调用`$store.commit`方法。**
+```js
+methods: {
+  ...mapMutations({
+    demo:'demo'
+  })
+  ...mapMutations(['demo'])
+},
+```
+***使用`mapActions`和`mapMutations`，需要在模板内调用方法时传入参数，否则会默认传参event！***
+
+## Vuex模块化+命名空间
+**使代码易于维护，数据分类更加明确。**
+
+**① 修改配置文件**
+```js
+const part1 = {
+    // 开启命名空间！
+    namespaced: true,
+    state: { datas },
+    getters: {
+        datas() {
+            return ...
+        },
+    },
+    actions: { ... },
+    mutations: { ... },
+}
+const part2 = {
+    namespaced: true,
+    state: { datas },
+    getters: {
+        datas() {
+            return ...
+        },
+    },
+    actions: { ... },
+    mutations: { ... },
+}
+
+export default new Vuex.Store({
+    modules: {
+        part1,
+        part2
+    }
+})
+```
+
+**② 组件中使用**
+```js
+// 开启命名空间后组件中读取 state数据
+computed: {
+    // 直接读取(xxx为模块名)
+    demo() {
+        return this.$store.state.xxx.data
+    },
+    // 借用mapState读取
+    ...mapState('xxx', ['data'])
+},
+// 开启命名空间后组件中读取 getters数据
+computed: {
+    // 直接读取
+    demo() {
+        return this.$store.getters['xxx/data']
+    },
+    // 借用mapGetters
+    ...mapGetters('xxx', ['data'])
+},
+// 开启命名空间后组件中调用 dispatch
+methods: {
+    // 直接读取
+    fun() {
+        this.$store.dispatch('xxx/fun', data)
+    },
+    ...mapActions('xxx', ['fun'])
+},
+// 开启命名空间后组件中调用 commit
+methods: {
+    // 直接读取
+    fun() {
+        this.$store.commit('xxx/fun', data)
+    },
+    ...mapMutations('xxx', ['fun'])
+},
+```
+
+:::tip
+**使用`map`方法在组件中获取传输`state`和`getters`与提交`Actions`和`Mutations`时，可以重复名调用的方法和数据。只需将数组形式变为对象形式即可！**
+```js
+...mapState("part", {
+    重命名:"原名称"
+})
+
+...mapGetters("part", {
+    重命名:"原名称"
+})
+// ...mapActions和...mapMutations同理
+```
+:::
