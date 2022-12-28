@@ -1547,3 +1547,50 @@ methods: {
 // ...mapActions和...mapMutations同理
 ```
 :::
+
+## Vue路由
+**vue-router 实现SPA应用**
+
+### SPA应用
+**1.单页SPA应用。**<br/>
+**2.整个应用只有一个完整的页面。**<br/>
+**3.点击页面的导航链接不会刷新页面，只会做页面的局部更新。**<br/>
+**4.数据要通过ajax请求获取。**
+
+## 路由
+**即k-v映射关系，`key`为路径，`value`为`function`或`component`**
+### 路由分类
+**① 前端路由**
+* **理解：`value`为`component`，用于展示页面内容。**
+* **工作工程：当浏览器路径改变时，对应组件就会展示。**
+
+**② 后端路由**
+* **理解：`value`为`function`，用于处理客户端提交的请求。**
+* **工作工程：服务器接收到一个请求时，根据请求路径找到匹配的函数来处理请求，返回响应数据。**
+
+### 基本使用
+**① 安装vue-router：`npm i vue-router@3`**<br/>
+**② 应用插件：`Vue.use(vue-router)`**<br/>
+**③ 创建router文件夹，配置index.js为router配置项**
+```js
+import VueRouter from 'vue-router'
+
+// 引入所需组件
+import component1 from '...'
+import component2 from '...'
+
+// 创建router实例对象
+const router = new VueRouter({
+    routes: [
+        {
+            path: '/component1',
+            component: component1
+        },
+        {
+            path: '/component2',
+            component: component2
+        }
+    ]
+})
+export default router
+```
