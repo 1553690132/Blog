@@ -1594,3 +1594,46 @@ const router = new VueRouter({
 })
 export default router
 ```
+**④ 实现切换：`active-class`可配置样式切换即高亮显示。**
+```html
+<router-link to="路由path"></router-link>
+```
+**⑤ 指定展示位置：`<router-view>`**
+```html
+<router-view></router-view>
+```
+:::tip
+**注意点：**
+* 路由组件通常放在`pages`文件夹下，一般组件放在`components`文件夹下。
+* 通过切换，不在页面显示的组件。默认已经被销毁，当需要使用时又会被挂载。
+* 每个组件都有自己独有的`$route`属性，里面存放着自己的路由信息（path）
+* 整个应用只有一个`router`，可以通过组件的`$router`属性获取到。
+:::
+
+## 嵌套路由
+**即路由下配置子路由，只有一级路由需要加`/`，之后嵌套路由无需加`/`。**
+
+**① 配置路由规则，使用`children`配置项**
+```js
+export default new VueRouter({
+    routes: [
+        {
+            path: 'father',
+            component: Father,
+            children: [{　　　　　　　　　 // 路径前不需要加/
+                path: 'son1',
+                components: Son1
+            }, {
+                path: 'son2',
+                component: Son2
+            }]
+        }
+    ]
+})
+```
+**② 跳转**
+```html
+<router-link to="/father/son">Son</router-link>
+```
+
+## 路由传参
