@@ -1698,3 +1698,12 @@ export default new VueRouter({
     }]
 })
 ```
+
+## router-link的replace属性
+* **① 作用：控制路由跳转时操作浏览器历史记录的模式。（控制跳转是否可以回退）**
+* **② 浏览器的历史记录有两种写入方式：`push`和`replace`，`push`为追加历史记录，`replace`为替换当前记录，路由跳转默认为push。**
+* **③ 开启replace模式：**
+```html
+<router-link to="/home" :replace="true"></router-link>
+<router-link to="/home" replace></router-link>
+```
