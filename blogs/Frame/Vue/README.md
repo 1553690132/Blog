@@ -1636,5 +1636,65 @@ export default new VueRouter({
 <router-link to="/father/son">Son</router-link>
 ```
 
-## 路由传参
-123
+## 路由传参params
+* **① 配置路由，声明接收params参数：`在path以占位符:形式声明参数！`**
+```js
+export default new VueRouter({
+    routes: [{
+        path: '/father',
+        component: Father,
+        children: [{
+            name: 'son',
+            path: 'son/:data1/:data2',
+            component: Son,
+        }]
+    }]
+})
+```
+
+* **② 传递参数：`若使用兑现写法则不能声明path，必须使用name进行跳转！`**
+```js
+<router-link to="`/father/son/${data1}/${data2}`">字符串写法</router-link>
+<router-link to="{
+    name:'son',
+    params: {
+        data1,
+        data2
+    }
+}">对象写法</router-link>
+//这里指定名称必须使用name，不能使用path！
+```
+
+* **③ 接收参数：`$route.params.参数名`**
+
+## 路由props配置
+:::tip
+**让路由组件更方便的接收参数**</br>
+**旧版：`$route.query.data 或 $route.params.data`**</br>
+**在路由内使用props配置，在组件内直接用props接收。**
+:::
+```js
+export default new VueRouter({
+    routes: [{
+        path: '/demo',
+        component: Demo,
+        // 写法一：值为对象，对象中的所有k-v均会以props形式传给Demo组件，但传值为规定好的死数据。
+        props: {data1, data2},
+
+        // 写法二：值为布尔值，若为真，则将会把该路由组件接收的所有params参数，传递给Demo组件。
+        props: true,
+
+        // 写法三：值为函数，
+        props($route) {
+            return {
+                data1: $route.query.data1,
+                data2: $route.query.data2,
+            }
+        }
+        // 写法三的简化：利用解构赋值
+        props({query: {data1, data2}}) {
+            return {data1, data2}
+        }
+    }]
+})
+```
