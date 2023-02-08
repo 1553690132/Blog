@@ -1707,3 +1707,35 @@ export default new VueRouter({
 <router-link to="/home" :replace="true"></router-link>
 <router-link to="/home" replace></router-link>
 ```
+
+## 编程式路由导航
+**不借助`router-link`进行路由跳转，使得路由跳转更加灵活。**</br>
+
+* **① 使用`$router`上的`push`和`replace`方法实现跳转。**
+```js
+export default {
+    methods: {
+        pushMethod() {
+            this.$router.push({
+                name: '',
+                path: '',
+                params: {},
+                query: {}
+            })
+        },
+        replaceMethod() {
+            this.$router.replace({
+                name: '',
+                path: '',
+                params: {},
+                query: {}
+            })
+        }
+    }
+}
+```
+* **② 利用`$router`自带API，类似于原生js中的`history`方法。**
+* (1) `$router.forward()`：前进至浏览器历史的下一页。
+* (2) `$router.back()`：后退至浏览器的上一页。
+* (3) `$router.go(delta)`：加载特定页面，`delta`为可选参数，为正值则向前移动，反之向后移动，若为0则相当于`location.reload()`刷新页面。
+
