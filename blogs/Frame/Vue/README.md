@@ -1739,3 +1739,24 @@ export default {
 * (2) `$router.back()`：后退至浏览器的上一页。
 * (3) `$router.go(delta)`：加载特定页面，`delta`为可选参数，为正值则向前移动，反之向后移动，若为0则相当于`location.reload()`刷新页面。
 
+## 缓存路由组件
+**`keep-alive`标签，用于让不展示的路由保持挂载而不被销毁。**
+### 基本使用
+**在展示的`router-view`外侧包裹标签，并使用`include`属性配置组件名称（组件内配置的name属性），不配置则默认为所有组件。**
+```html
+<keep-alive include="组件名">
+    <router-view></router-view>
+</keep-alive>
+```
+**若想同时缓存多个组件，则将include属性绑定，组件名以数组形式编写。**
+```html
+<keep-alive :include="['part1', 'part2']">
+    <router-view></router-view>
+</keep-alive>
+```
+### 独有的生命周期钩子
+**作用：用于捕获路由组件的激活状态。**<br/>
+**`activated`：路由组件被激活时调用。**<br/>
+**`deactivated`：路由组件失活时调用。**
+
+## 路由守卫
