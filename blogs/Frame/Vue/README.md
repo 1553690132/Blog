@@ -1760,3 +1760,107 @@ export default {
 **`deactivated`：路由组件失活时调用。**
 
 ## 路由守卫
+**对路由进行权限控制（对路由器router进行配置）**
+### 全局守卫
+* **全局前置守卫`beforeEach`：在路由初始化或每次路由切换前调用。（参数：to跳转至路由信息、from来自路由信息、next跳转函数）**
+* **全局后置守卫`afterEach`：在路由初始化或每次路由切换后调用。（参数：to跳转至路由信息、from来自路由信息）**
+```js
+const router = new VueRouter({
+    routes: [{
+        name: 'demo',
+        path: '/demo',
+        meta: {isAuth: true}
+        // meta为路由元信息，用于配置路由的属性。
+    }]
+})
+// 全局前置路由守卫：to跳转信息，from来自信息，next跳转函数。
+router.beforeEach((to, from, next) => {
+    if(to.meta.isAuth) {
+        ...
+    } else {
+        next()
+    }
+    // 调用next函数则允许放行。
+})
+// 全局后置路由守卫：to跳转信息，from来自信息。
+router.afterEach((to, from) => {
+})
+
+export default router
+```
+
+### 独享守位
+**独享路由守卫`beforeEnter`：参数与全局前置路由守卫一致，内部逻辑结构也一致。**
+```js
+router.beforeEnter((to, from, next) => {
+})
+```
+
+### 组件内守卫
+* **组件内路由进入守卫`beforeRouteEnter`：通过路由规则，进入该组件时调用。**
+* **组件内路由离开守卫`beforeRouteLeave`：通过路由规则，离开该组件时调用。**
+```js
+export default {
+    name: 'About',
+    beforeRouteEnter((to, from, next) => {
+        // 通过路由规则进入该组件时调用
+    }),
+    beforeRouteLeave((to, from, next) => {
+        // 通过路由规则离开该组件时调用
+    })
+}
+```
+
+### 路由守卫执行顺序
+![执行顺序](/blog/img_vue/sw.png)
+![解析流程](/blog/img_vue/jx.png)
+
+## 重定向
+**当用户访问一个和路由时会跳转至配置的重定向路由，通过配置`routes`完成。**
+* **普通重定向**
+```js
+const router = new VueRouter({
+    routes: [
+        {path: '/home', redirect: '/'}
+    ]
+})
+
+```
+* **命名路由重定向**
+```js
+const router = new VueRouter({
+    routes: [
+        {path: '/', redirect: {name: 'page'}}
+    ]
+})
+```
+* **动态重定向**
+```js
+const router = new VueRouter({
+    routes: [
+        {path: '/', redirect: to => {
+            // 方法接收 目标路由 作为参数
+            // return 重定向的 目标路径
+        }}
+    ]
+})
+```
+## 别名
+**将`/`别名为`/home`，意味着当用户访问`/home`时，URL仍然是`/home`，但会被匹配为用户正在访问`/`。**
+```js
+const routes = [{path: '/', component: home, alias: '/home'}]
+```
+“别名”的功能让你可以自由地将 UI 结构映射到任意的 URL，而不是受限于配置的嵌套路由结构。
+
+## 路由工作模式
+**通过配置VueRouter中的`mode`属性值来进行路由工作模式的配置。**
+### hash模式
+url#及以后内容即为hash值，不会作为路径的一部分被发送至服务器。
+* **hash模式地址中永远有#号，不美观。**
+* **若以后地址通过第三方手机app分享，若app校验严格，则地址将会被标记为非法。**
+* **兼容性好。**
+  
+### history模式
+* **地址干净美观。**
+* **兼容性比起hash模式略差。**
+* **应用部署上线后需要后端人员支持，解决刷新页面服务端404的问题。nodejs可通过引入`connect-history-api-fallback`中间件解决刷新404问题。**
