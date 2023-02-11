@@ -86,7 +86,7 @@ createApp(App).mount('#app')
 ```
 
 ## 常用Composition API
-### setup
+### setup核心
 **① 理解：Vue3中新的配置项，值为一个函数。**<br/>
 **② setup是所有Composition API的基础。**<br/>
 **③ 组件中所用到的：数据、方法等等，均需配置在setup中。**<br/>
@@ -125,3 +125,24 @@ createApp(App).mount('#app')
     }   
 </script>
 ```
+:::tip
+**注意：** <br/>
+<strong style="color:#DD5145">尽量不要将Vue2与Vue3语法混用:</strong>
+* Vue2.x配置（data、methods、computed）中可以访问搭配setup中的属性和方法。
+* 在setup中<strong style="color:#DD5145">不能访问到</strong>Vue2.x配置
+* 如果有重名情况，则setup优先
+<strong style="color:#DD5145">setup不能是一个async函数</strong>，因为返回值不再是return的对象，而是promise，二模板无法查看return对象中的属性。若需要返回Promise实例，则需要Suspense和一部组件的配合使用。
+:::
+
+### ref函数
+**作用：定义一个响应式的数据**<br/>
+**语法：`const xxx = ref(initValue)`**
+* 创建了一个包含响应式数据
+* JS中操作数据：`xxx.value`
+* 模板中读取数据：不需要`.value`，直接：`<div>{{ xxx }}</div>`
+:::tip
+**备注：**
+* **接收的数据可以是：基本类型、对象类型。**
+* **基本类型数据：响应式依然依靠`Obejct.defineProperty()`的`get`和`set`完成。**
+* **对象类型数据：内部使用了Vue3的新函数:----`reactive`函数。即Proxy的实现**
+:::
