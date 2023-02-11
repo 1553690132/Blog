@@ -143,6 +143,6 @@ createApp(App).mount('#app')
 :::tip
 **备注：**
 * **接收的数据可以是：基本类型、对象类型。**
-* **基本类型数据：响应式依然依靠`Obejct.defineProperty()`的`get`和`set`完成。**
-* **对象类型数据：内部使用了Vue3的新函数:----`reactive`函数。即Proxy的实现**
+* <strong style="color:#DD5145">基本类型数据：响应式依然依靠`Obejct.defineProperty()`的`get`和`set`完成。</strong>
+* <strong style="color:#DD5145">对象类型数据：内部使用了Vue3的新函数:----`reactive`函数。即Proxy的实现</strong>
 :::
