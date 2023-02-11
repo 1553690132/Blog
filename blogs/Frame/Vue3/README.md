@@ -52,7 +52,7 @@ npm run serve
 ```
 ### vite创建工程
 * vite---新一代前端构建工具
-* **优势：**① 开发环境中，无需打包，可快速冷启动。② 轻量快速的热重载（HMR）③ 真正的按需编译，无需等待整个应用编译完成。
+* **优势：** ① 开发环境中，无需打包，可快速冷启动。② 轻量快速的热重载（HMR）③ 真正的按需编译，无需等待整个应用编译完成。
 ```bash
 ## 创建工程
 npm init vite-app <project-name>
@@ -62,4 +62,66 @@ cd <project-name>
 npm install
 ## 运行
 npm run dev
+```
+
+## Vue3入口文件
+**旧版：**
+```js
+import Vue from 'vue'
+import App from './App.vue'
+
+new Vue({
+    render: h => h(App)
+}).$mount('#app')
+```
+
+**新版：**
+* 引入的不再是Vue构造函数，而是`createApp`工厂函数。
+* 创建实例对象app相当于Vue2中的vm实例对象，但app相比vm更加轻量。
+```js
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App).mount('#app')
+```
+
+## 常用Composition API
+### setup
+**① 理解：Vue3中新的配置项，值为一个函数。**<br/>
+**② setup是所有Composition API的基础。**<br/>
+**③ 组件中所用到的：数据、方法等等，均需配置在setup中。**<br/>
+**④ setup的两种返回值：**
+* 若返回一个对象，则对象中的属性、方法, 在模板中均可以直接使用。（重点关注！）
+```vue
+<script>
+    export default {
+        name: 'App',
+        setup() {
+            let data = '',
+
+            function showData() {
+                ...
+            },
+
+            return {
+                data,
+                showData(),
+            }
+        }
+    }
+</script>
+```
+* 若返回一个渲染函数：则可以自定义渲染内容。
+```vue
+<script>
+    import { h } from 'vue',
+    export default {
+        name: 'App',
+        setup() {
+            return () => {
+                return h('渲染标签值', '渲染内容')
+            }
+        }
+    }   
+</script>
 ```
