@@ -135,10 +135,10 @@ createApp(App).mount('#app')
 :::
 
 ### ref函数
-**作用：定义一个响应式的数据**<br/>
+**作用：定义一个<strong style="color:#DD5145">响应式</strong>的数据**<br/>
 **语法：`const xxx = ref(initValue)`**
 * 创建了一个包含响应式数据
-* JS中操作数据：`xxx.value`
+* <strong style="color:#DD5145">JS中操作数据：`xxx.value`</strong>
 * 模板中读取数据：不需要`.value`，直接：`<div>{{ xxx }}</div>`
 :::tip
 **备注：**
@@ -146,3 +146,26 @@ createApp(App).mount('#app')
 * <strong style="color:#DD5145">基本类型数据：响应式依然依靠`Obejct.defineProperty()`的`get`和`set`完成。</strong>
 * <strong style="color:#DD5145">对象类型数据：内部使用了Vue3的新函数:----`reactive`函数。即Proxy的实现</strong>
 :::
+
+### reactive函数
+* **作用：定义一个<strong style="color:#DD5145">对象类型</strong>的响应式数据。**
+* **语法：`const xxx = reactive(源对象)`接收一个对象（或数组），返回一个<strong style="color:#DD5145">代理对象（Proxy的实例对象，简称proxy对象）</strong>**
+* **reactive定义的响应式是深层次的。**
+* **内部基于ES6的Proxy实现，通过代理对象操作源对象内部数据进行操作。**
+
+## Vue3响应式原理
+### Vue2.x的响应式
+**实现原理：**
+* 对象类型：通过`Object.defineProperty()`对属性的读取、修改进行拦截（数据劫持）。
+* 数组类型：通过重写更新数组的一系列方法来实现拦截。（对数组的变更方法进行了包裹）
+```js
+Object.defineProperty(data, 'count', {
+    get(){}
+    set(){}
+})
+```
+**存在问题：**
+* 新增属性、删除属性，界面不会更新。（需要使用`$set`和`$delete`方法）
+* 直接通过下标修改数组，界面不会自动更新。(推荐使用`splice`方法)
+
+### Vue3.0的响应式
