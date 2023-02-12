@@ -167,5 +167,45 @@ Object.defineProperty(data, 'count', {
 **存在问题：**
 * 新增属性、删除属性，界面不会更新。（需要使用`$set`和`$delete`方法）
 * 直接通过下标修改数组，界面不会自动更新。(推荐使用`splice`方法)
+```js
+let person = {
+    name: 'lwh',
+    age: 18
+}
+// 模拟Vue2响应式
+let p = {}
+Object.keys(person).forEach(e => {
+    Object.defineProperty(p, e.toString(), {
+        configurable: true,
+        get() {
+            return e
+        },
+        set(value) {
+            console.log(`${e}发生修改`);
+            e = value
+        }
+    })
+})
+// Vue2的模拟，难以捕获到新增和删除属性的操作。
+```
 
 ### Vue3.0的响应式
+**实现原理：**
+* 通过[`Proxy`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy)（代理）：拦截对象中任意属性的变化，包括：属性值的读写、属性的添加、属性的删除等。
+* 通过[`Reflect`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect)（反射）：对源对象的属性进行操作。
+```js
+new Proxy(data, {
+    get(target, prop) {
+        // 拦截读取属性值
+        return Reflect.get(target, prop)
+    },
+    set(target, prop, value) {
+        // 拦截设置属性值/新增属性值
+        return Reflect.set(target, prop, value)
+    },
+    deleteProperty(target, prop) {
+        // 拦截删除属性值
+        return Reflect.deleteProperty(target, prop)
+    }
+})
+```
