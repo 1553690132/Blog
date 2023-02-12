@@ -153,6 +153,20 @@ createApp(App).mount('#app')
 * **reactive定义的响应式是深层次的。**
 * **内部基于ES6的Proxy实现，通过代理对象操作源对象内部数据进行操作。**
 
+### reactive对比ref
+:::tip
+**从定义数据角度对比：**
+* `ref`用来定义：<strong style="color:#DD5145">基本类型数据</strong>
+* `reactive`用来定义：<strong style="color:#DD5145">对象或者数组类型数据</strong>
+* 备注：`ref`也可以用来定义<strong style="color:#DD5145">对象或者数组类型</strong>数据，内部会自动通过`reactive`转化为<strong style="color:#DD5145">代理对象。</strong>
+**从原理角度对比：**
+* `ref`通过<strong style="color:#DD5145">`Object.defineProperty()`</strong>的<strong style="color:orange">`get`</strong>和<strong style="color:#DD5145">`set`</strong>来实现响应式（数据劫持）
+* `reactive`通过使用<strong style="color:#DD5145">`Proxy`</strong>来实现响应式（数据劫持），并通过<strong style="color:#DD5145">`Reflect`</strong>操作<strong style="color:#DD5145">源对象内部</strong>的数据。
+**从使用角度对比：**
+* `ref`定义的数据：JS中操作数据<strong style="color:#DD5145">需要通过`.value`</strong>，模板template中读取数据不需要。
+* `reactive`定义的数据，操作与读取均不需要使用`.value`。
+:::
+
 ## Vue3响应式原理
 ### Vue2.x的响应式
 **实现原理：**
