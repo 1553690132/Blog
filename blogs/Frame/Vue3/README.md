@@ -340,14 +340,14 @@ watchEffect(() => {
 * `destory`改为`unmounted`
 
 **Vue3中也提供了Composition API形式的生命周期钩子，与Vue2中的对应情况如下：**
-* - `beforeCreate`===>`setup()`
-* - `created`=======>`setup()`
-* - `beforeMount` ===>`onBeforeMount`
-* - `mounted`=======>`onMounted`
-* - `beforeUpdate`===>`onBeforeUpdate`
-* - `updated` =======>`onUpdated`
-* - `beforeUnmount` ==>`onBeforeUnmount`
-* - `unmounted` =====>`onUnmounted`
+* `beforeCreate`===>`setup()`
+* `created`=======>`setup()`
+* `beforeMount` ===>`onBeforeMount`
+* `mounted`=======>`onMounted`
+* `beforeUpdate`===>`onBeforeUpdate`
+* `updated` =======>`onUpdated`
+* `beforeUnmount` ==>`onBeforeUnmount`
+* `unmounted` =====>`onUnmounted`
 
 ## 自定义hook函数
 * 本质上是一个函数，用于将setup函数中使用的Composition API封装。
@@ -370,3 +370,5 @@ export default {
     }
 }
 ```
+
+## toRef
