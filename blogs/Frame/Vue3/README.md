@@ -233,3 +233,81 @@ new Proxy(data, {
     }
 })
 ```
+
+## 计算属性与监视
+### computed函数
+* 与Vue2.x中computed配置功能一致
+* **写法：分为简写（函数式）和完整（对象式）**
+```js
+import {computed} from 'vue'
+export default {
+    setup(){
+        // 简写形式：不考虑修改
+        let datas = computed(()=>{
+            return ...
+        })
+        // 完整形式：考虑修改
+        let datas = computed({
+            get(){
+                return ...
+            }
+            set(value) {
+                ...
+            }
+        })
+        return {datas}
+    }
+}
+```
+
+### watch函数
+* 与Vue2.x中watch配置功能一致
+**缺点：**
+* 监视`reactive`定义的<strong style="color:orange">响应式数据</strong>时：<strong style="color:#DD5145">oldValue无法正确获取，强制开启`deep`深度监视（`deep`配置项失效）</strong>
+* 监视`reactive`定义的<strong style="color:orange">响应式数据中某个属性</strong>时：<strong style="color:#DD5145">`deep`配置有效</strong>
+```vue
+<script>
+import {ref, reactive, watch} from 'vue'
+export default {
+    setup() {
+        let sum = ref(0);
+        let msg = ref('hello')
+        let person = reactive({
+            name:'lwh',
+            age: 18,
+            job: {
+                j1: {
+                    salary:20
+                }
+            }
+        })
+
+        // 情况一：监视ref定义的响应式数据
+        watch(sum, (newValue, oldValue) => {
+            console.log('sum变化')
+        }, {immediate: true})
+
+        // 情况二：监视ref定义的多个响应式数据
+        watch([sum, msg], (newValue, oldValue) => {
+            console.log('sum或msg变化')
+        }, {immediate: true})
+
+        // 情况三：监视reactive定义的响应式数据
+        // 无法获取正确的oldValue值,且deep默认开启,无法配置.
+        watch(person, (newValue, oldValue) => {
+            console.log('person属性发生变化')
+        })
+
+        // 情况四：监视reactive定义的响应式数据的某个属性
+        watch(() => person.job, (newValue, oldValue) => {
+            console.log('person的job属性发生变化,此时deep属性可以使用.')
+        }, {deep: true})
+
+        // 情况五：监视reactive定义的响应式数据的某些属性
+        watch([() => person.job, () => person.name], (newValue, oldValue) => {
+            consloe.log('person属性发生变化!')
+        })
+    }
+}
+</script>
+```
