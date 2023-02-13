@@ -334,3 +334,39 @@ watchEffect(() => {
 ![vue2生命周期](/blog/img_vue/zq.png)
 ### vue3生命周期
 ![vue3生命周期](/blog/img_vue/smzq3.png)
+
+**Vue3中可以继续使用Vue2中的生命周期钩子，但有改名的情况：**
+* `beforeDestory`改为`beforeUnmount`
+* `destory`改为`unmounted`
+
+**Vue3中也提供了Composition API形式的生命周期钩子，与Vue2中的对应情况如下：**
+* - `beforeCreate`===>`setup()`
+* - `created`=======>`setup()`
+* - `beforeMount` ===>`onBeforeMount`
+* - `mounted`=======>`onMounted`
+* - `beforeUpdate`===>`onBeforeUpdate`
+* - `updated` =======>`onUpdated`
+* - `beforeUnmount` ==>`onBeforeUnmount`
+* - `unmounted` =====>`onUnmounted`
+
+## 自定义hook函数
+* 本质上是一个函数，用于将setup函数中使用的Composition API封装。
+* 类似于Vue2中的mixin
+* 自定义hook的优势：复用代码，令setup中的逻辑更加清晰易懂。
+
+```js
+// 新建hooks文件夹用于创建复用的hook文件
+export default function() {
+    ....
+    return "数据"
+}
+
+// 在组件中调用
+import useXXX from '../hooks/useXXX.js'
+export default {
+    setup() {
+        let datas = useXXX()
+        return { datas }
+    }
+}
+```
