@@ -328,3 +328,9 @@ watchEffect(() => {
 })
 ```
 
+## 生命周期
+
+### vue2.x生命周期
+![vue2生命周期](/blog/img_vue/zq.png)
+### vue3生命周期
+![vue3生命周期](/blog/img_vue/smzq3.png)
