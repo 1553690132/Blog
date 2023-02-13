@@ -311,3 +311,20 @@ export default {
 }
 </script>
 ```
+
+### watchEffect函数
+* `watch`的思想是：**既要指明监视的属性，也要指明监视的回调。**
+* `watchEffect`的思想是：**不用指名监视哪个属性，监视的回调中用到哪个属性，就去监视哪个属性。**
+* `watchEffect`与`computed`类似：
+  * 但`computed`注重的是计算出的结果值（回调函数的返回值），故必须写返回值。
+  * 而`watchEffect`更注重的是过程（回调函数的函数体），所以不用写返回值。
+
+```js
+// watchEffect所指定的回调中用到的数据只要发生变化，则重新执行回调。
+watchEffect(() => {
+    const x1 = data1.value
+    const x2 = data2.data
+    console.log('监听成功，watchEffect执行！')
+})
+```
+
