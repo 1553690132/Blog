@@ -28,10 +28,12 @@ sidebar: auto
 * `ref`与`reactive`
 * `watch`与`watchEffect`
 * `provide`与`inject`
+
 **② 新的内置组件**
 * `Fragment`
 * `Teleport`
 * `Suspense`
+
 **③ 其他改变**
 * 新的生命周期钩子
 * data选项应始终被声明为一个**函数**
@@ -136,9 +138,11 @@ createApp(App).mount('#app')
 
 ### setup的两个注意点
 **`setup`执行的时机**
-* 在`beforeCreate`前执行一次，`this`为`undefined`。
-**`setup`的参数**
+* 在`beforeCreate`前执行一次，`this`为`undefined`。<br/>
+
+**`setup`的参数：**
 **`props`：值为对象，包含：组件外部传递过来，且组件内部声明接收了的属性。**<br/>
+
 **`context`：上下文对象。**
 * `attrs`：值为对象，包含：组件外部传递过来，但没有在props配置中声明的属性，相当于`this.$attrs`
 * `slots`：收到的插槽内容，相当于`this.$slots`
@@ -371,4 +375,30 @@ export default {
 }
 ```
 
-## toRef
+## toRef与toRefs
+* **作用：** 创建一个ref对象，其value值指向另一个对象的某个属性。
+* **语法：** `const name = toRef(person, 'name')`
+* **应用：** 要将响应式对象中的某个属性单独提供给外部使用时。
+* **扩展：** `toRefs`与`toRef`功能一致，但可以批量创建多个ref对象，语法：`toRefs(person)`
+
+## shallowReactive与shallowRef
+* **shallowReactive：** 只处理对象最外层属性的响应式（浅响应式）
+* **shallowRef：** 只处理基本数据类型的响应式，不进行对象的响应式处理。
+* **使用时机：** 
+    * 如果有一个对象数据，结构比较深，但变化时仅外层属性变化，采用`shallowReactive`
+    * 如果有一个对象数据，后续功能不会修改该对象中的属性，而是生成新的对象来替换，使用`shallowRef`
+
+## readonly和shallowReadonly
+* **readonly：** 让一个响应式数据变为只读<strong style="color:red">（深只读）</strong>
+* **shallowReadonly：** 让一个响应式数据变为只读<strong style="color:red">（浅只读）</strong>
+* **应用场景：** 不希望数据被修改时使用。
+
+## toRaw和markRaw
+* **toRaw：**
+  * **作用**：将一个由<strong style="color:red">`reactive`</strong>创建的<strong style="color:orange">响应式对象</strong>转化为<strong style="color:orange">普通对象</strong>
+  * **使用场景**：用于读取响应式对象对应的普通对象，对这个普通对象的所有操作不会影响页面更新。
+* **markRaw：**
+  * **作用：** 标记一个对象，使其永远不会成为响应式对象。
+  * **应用场景：**
+    * 有些值不应该被设置为响应式，例如复杂的第三方类库。
+    * 当渲染具有不可变数据源的大列表时，跳过响应式转换可提高性能。
