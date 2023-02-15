@@ -402,3 +402,83 @@ export default {
   * **应用场景：**
     * 有些值不应该被设置为响应式，例如复杂的第三方类库。
     * 当渲染具有不可变数据源的大列表时，跳过响应式转换可提高性能。
+
+## customRef
+* **作用：** 创建一个自定义的ref，并对其依赖项跟踪和更新触发进行显式控制。
+* **注意：** `customRef`自带`track`和`trigger`函数参数，返回值为对象，且对象内部必须配置get、set函数。
+  * `track`用于追踪数据更新，通常在get中执行。
+  * `trigger`用于通知Vue重新渲染模板，通常在set中执行。 
+* **案例：实现防抖效果**
+```vue
+<template>
+  <input type="text" v-model=":key="key"">
+  <h2>{{ keyWord }}</h2>
+</template>
+
+<script>
+import { customRef } from "vue";
+export default {
+  setup() {
+    function myRef(value, delay) {
+      let timer;
+      return customRef((track, trigger) => {
+        return {
+          get() {
+            track();
+            return value;
+          },
+          set(newValue) {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+              value = newValue;
+              trigger();
+            }, delay);
+          },
+        };
+      });
+    }
+
+    let keyWord = myRef("hello", 500);
+    return { keyWord };
+  },
+};
+</script>
+```
+
+## provide与inject
+* **作用：** 实现<strong style="red">祖孙间组件</strong>通信。（跨级组件间通信方式）
+* **套路：** 父组件的`provide`选项来提供数据，后代组件通过`inject`选项获取数据。
+* **具体写法：**</br>
+1.祖组件中： 
+```js
+setup() {
+    let car = {name:'BMW', price:'20W'};
+    provide('car', car);
+}
+```
+2.后代组件中：
+```js
+setup() {
+    const car = inject('car');
+    return {car}
+}
+```
+* **注意点：** 虽然provide和inject可以实现祖先与后代组件间通信，但父子间通信最好依然采用`props`进行通信。
+
+## 响应式数据的判断
+* `isRef`：检查一个值是否为`ref`对象。
+* `isReactive`：检查一个对象是否由`reactive`创建的响应式代理。
+* `isReadonly`：检查一个对象是否由`readonly`创建的只读代理。
+* `isProxy`：检查一个对象是否由`reactive`或`readonly`方法创建的代理对象。
+
+## Composition API的优势
+### Options API中存在的问题
+使用传统Options API中，新增或者修改一个需求，需要分别在`data`、`methods`、`computed`里修改
+<div style="width:600px;height:370px;overflow:hidden;">
+    <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f84e4e2c02424d9a99862ade0a2e4114~tplv-k3u1fbpfcp-watermark.image" style="width:600px;" />
+</div>
+<div style="width:300px;height:370px;overflow:hidden;">
+    <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e5ac7e20d1784887a826f6360768a368~tplv-k3u1fbpfcp-watermark.image" style="zoom:50%;width:560px;" /> 
+</div>
+
+### Composition API的优势
