@@ -473,12 +473,12 @@ setup() {
 
 ## Composition API的优势
 ### Options API中存在的问题
-使用传统Options API中，新增或者修改一个需求，需要分别在`data`、`methods`、`computed`里修改
-<div style="width:600px;height:370px;overflow:hidden;">
-    <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f84e4e2c02424d9a99862ade0a2e4114~tplv-k3u1fbpfcp-watermark.image" style="width:600px;" />
+使用传统Options API中，新增或者修改一个需求，需要分别在`data`、`methods`、`computed`里修改。
+<div style="overflow:hidden;">
+    <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f84e4e2c02424d9a99862ade0a2e4114~tplv-k3u1fbpfcp-watermark.image" />
 </div>
-<div style="width:300px;height:370px;overflow:hidden;">
-    <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e5ac7e20d1784887a826f6360768a368~tplv-k3u1fbpfcp-watermark.image" style="zoom:50%;width:560px;" /> 
+<div style="overflow:hidden;">
+    <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e5ac7e20d1784887a826f6360768a368~tplv-k3u1fbpfcp-watermark.image"/> 
 </div>
 
 ### Composition API的优势
