@@ -8,8 +8,6 @@ categories:
 sidebar: auto
 ---
 
-# TypeScript
-
 ## TypeScript简述
 * 以JavaScript为基础构建的语言。
 * 是JavaScript的超集。
@@ -50,6 +48,52 @@ function fn(参数: 类型, 参数: 类型): 类型 {
 ![类型](/blog/img_typescript/2.png)
 
 * **number**
+```ts
+let decimal: number = 6;
+let hex: number = 0xf00d;
+let binary: number = 0b1010;
+let octal: number = 0o744;
+let big: bigint = 100n;
+```
 * **boolean**
+```ts
+let isDone: boolean = false;
+```
 * **string**
+```ts
+let color: string = "blue";
+
+let fullName: string = `Bob`;
+let age: number = 18;
+let sentence: string = `Hello, my name is ${fullName}. I'll be ${age + 1} years old next month!`
+```
 * **字面量**
+  * 可以使用字面量去指定变量的类型，通过字面量和`|`可指定变量的取值范围。 
+  * ```ts
+    let color: 'red' | 'blue' | 'black';
+    let num: 1 | 2 | 3 | 4 | 5;
+    ```
+* **any**
+  * `any`表示为任意类型，变量被设置为`any`类型，相当于关闭了TS对此变量的类型检测。
+  * 若声明变量未指定类型且未赋值，则TS会自动设置为`any`类型。
+  * ```ts
+    let d: any = 4;
+    d = 'hello';
+    d = true;
+    ```
+* **unknown**
+  * `unknown`表示为未知类型的值，实际上就是安全类型的any。
+  * ```ts
+    let notSure: unknown = 4;
+    notSure = 'hello';
+    ```
+:::tip
+TS中`any`类型的变量可以赋值给任意变量，而`unknown`则不行。
+```ts
+let a: any = 10;
+let b: string;
+let c: unknown;
+b = a; // 可以赋值
+b = c; // 报错！
+```
+:::
