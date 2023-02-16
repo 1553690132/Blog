@@ -128,8 +128,54 @@ b = c; // 报错！
       // 此时fn变量为函数，且参数必须有两个均为number变量，返回类型也为number变量。
     ```
 * **array**
+  * 类型[]声明：
+    * ```ts
+      let list: number[] = [1, 2, 3];
+      ``` 
+  * Array<类型>声明：
+    * ```ts
+      let list: Array<string> = ['a', 'b', 'c'];
+      ``` 
 * **tuple**
+  * **元组**：为固定长度的数组，语法：[类型，类型]。
+  * ```ts
+      let list: [string, number];
+      list = ['hello', 666];
+    ```
 * **enum**
+* **枚举**：用于给变量设置范围值。
+  * ```ts
+      enum Gender {
+        Male,
+        Famale
+      };
+
+      let person: {name: string, gender: Gender};
+
+      person = {'lwh', Gender.Male}
+
+      enum Color {
+        Red,
+        Yellow,
+        Blue
+      };
+
+      let c: Color = Color.Red;
+    ```
+* `|`可以声明不同类型，`&`也可以进行声明，代表同时符合，一般仅在声明对象时使用。
+  * ```ts
+      let obj: {name: string} & {age: number};
+      // 与直接声明功能相同
+      let obj2: {name: string, age: number}
+    ``` 
+* **类型的别名**
+  * 对于冗长的类型，使用**别名**进行代替。
+  * ```ts
+      type myType = 1 | 2 | 3;
+      let a: 1 | 2 | 3;
+      let b: myType;
+      // b的类型与a一致，均为 1 | 2 | 3。
+    ``` 
 
 ### 类型断言
 * 有些情况下，变量的类型对于程序员明确，但TS解析器不清楚。此时，需要通过`类型断言`来告诉编译器变量的类型，(使用类型断言就可以做到`unknown`类型数据给变量赋值)。断言有以下两种形式：
