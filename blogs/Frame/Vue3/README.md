@@ -133,7 +133,7 @@ createApp(App).mount('#app')
 * Vue2.x配置（data、methods、computed）中可以访问搭配setup中的属性和方法。
 * 在setup中<strong style="color:#DD5145">不能访问到</strong>Vue2.x配置
 * 如果有重名情况，则setup优先
-<strong style="color:#DD5145">setup不能是一个async函数</strong>，因为返回值不再是return的对象，而是promise，二模板无法查看return对象中的属性。若需要返回Promise实例，则需要Suspense和一部组件的配合使用。
+<strong style="color:#DD5145">setup不能是一个`async`函数</strong>，因为返回值不再是return的对象，而是`promise`，且模板无法查看return对象中的属性。若需要返回`Promise`实例，则需要`Suspense`和异步组件的配合使用。
 :::
 
 ### setup的两个注意点
@@ -482,3 +482,126 @@ setup() {
 </div>
 
 ### Composition API的优势
+更加优雅的阻止代码、函数。让相关功能的代理更加有序的组织在一起。
+<div style="overflow:hidden;">
+    <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/bc0be8211fc54b6c941c036791ba4efe~tplv-k3u1fbpfcp-watermark.image"/>
+</div>
+<div style="overflow:hidden;">
+    <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6cc55165c0e34069a75fe36f8712eb80~tplv-k3u1fbpfcp-watermark.image"/>
+</div>
+
+## Fragment组件
+* 在vue2中：组件必须有一个根标签。
+* 在vue3中：组件可以没有根标签，内部会将多个标签包含在一个<strong style="color:red">Fragment虚拟元素</strong>中。
+* 优势：减少层级嵌套，减少内存占用。
+
+## Teleport组件
+**作用：** `Teleport`能够将我们的<strong style="color:red">组件html结构</strong>移动到指定位置。
+```vue
+<template>
+    <teleport to="body">
+    <!-- 使用to指定传送位置 -->
+    <!-- teleport内部的html结构将被传送至body内，即为最外层。 -->
+    </teleport>
+</template>
+```
+
+## Suspense组件
+**作用：** 等待<strong style="color:red">异步组件</strong>时渲染一些额外内容，提升应用的用户体验。<br/>
+**注意：** 由于Suespense组件本质上是利用vue中的插槽进行渲染的替换，所以需要在内部配置好两个利用template包裹好的组件，为默认插槽`v-slot:default`和替换插槽`v-slot:fallback`。
+**使用步骤：**
+* 异步引入组件
+```js
+import { defineAsyncCompontent } from 'vue'
+const Child = defineAsyncComponent(() => import('./component/Child.vue'))
+// 这里的引入方式，类似于vue中的路由懒加载
+```
+* 使用`Suspense`包裹组件，并配置好`default`和`fallback`
+```vue
+<template>
+    <div class="app">
+        <Suspense>
+            <template v-slot:default>
+                <Child />
+            </template>
+            <template v-slot:fallback>
+                <h2>代替加载的文字...</h2>
+            </template>
+        </Suspense>    
+    </div>
+</template>
+```
+
+## Vue3的其他改变
+### 全局API的转移
+**Vue2.x中有许多全局API和配置**
+* 例如注册全局组件、注册全局指令。
+```js
+// 注册全局组件
+Vue.component('MyButton', {
+    data: (() => {
+        count: 0
+    }),
+    template: ``
+})
+
+// 注册全局指令
+Vue.directive('focus', {
+    inserted: el => el.focus()
+})
+```
+
+**Vue3对以下API进行了调整：**
+* 将全局的API，即：`Vue.xxx`调整到应用实例`app`上。
+![vue3API变化](/blog/img_vue/vue3_other_api.png)
+
+### 其他改变
+* **data选项应始终被声明为一个函数。**
+* **过度类名发生更改：`vue-enter ===> vue-enter-from`、`vue-leave ===> vue-leave-from`**
+  * vue2写法：
+    ```vue
+    <style>
+    .v-enter,
+    .v-leave-to {
+        opacity: 0;
+    }
+    .v-leave,
+    .v-enter-to {
+        opacity: 1;
+    }
+    </style>
+    ```
+  * vue3写法： 
+    ```vue
+    <style>
+    .v-enter-from,
+    .v-leave-to {
+        opacity: 0;
+    }
+
+    .v-leave-from,
+    .v-enter-to {
+        opacity: 1;
+    }
+    </style>
+    ```
+* <strong style="color:red">移除</strong>`keyCode`作为`v-on`的修饰符，同时也不再支持`config.keyCodes`。
+* <strong style="color:red">移除</strong>`v-on.native`修饰符。
+  * 父组件中绑定事件 
+    ```vue
+    <template>
+        <my-component v-on:close="handleComponentEvent" v-on:click="handleNativeClickEvent" />
+    </template>
+    ```
+  * 子组件中声明自定义事件
+    ```vue
+    <script>
+        export default {
+            emits: ['close']
+        }
+    </script>
+    ```
+* <strong style="color:red">移除</strong>过滤器(filter)
+```
+过滤器虽然这看起来很方便，但它需要一个自定义语法，打破大括号内表达式是 “只是 JavaScript” 的假设，这不仅有学习成本，而且有实现成本！建议用方法调用或计算属性去替换过滤器。
+```
