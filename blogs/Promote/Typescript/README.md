@@ -97,3 +97,49 @@ b = a; // 可以赋值
 b = c; // 报错！
 ```
 :::
+* **void**
+  * ```ts
+    let unusable: void = undefined;
+    ```
+* **never**
+  * `never`代表永远不会有返回结果。
+  * ```ts
+    function fn(msg: string): never {
+      // 直接抛出异常，不会返回具体结果
+      throw new Error('error!')
+    }
+    ```
+* **object**
+  * object表示一个js对象，可以是`{}`，也可以是fuction。
+  * `{}`可以用来指定对象中包含哪些属性，<strong style="color:red">属性后加`?`代表属性是可选的</strong>
+    * ```ts
+      let obj: {name: string, age?: number};
+      // 这样在赋值对象时，age属性可有可无，但name属性必须有。
+      obj = {name: 'lwh'};
+      ``` 
+  * 在对对象进行限制时，利用`[propName:string]:any`设置个数可变的参数。
+    * ```ts
+      let obj: {name: string, [propName: string]: any};
+      // [prop: string]: any 代表参数名类型为string，参数类型为任意值。
+      ```
+  * 同样可以对函数变量设置限制
+    * ```ts
+      let fn: (data1: number, data2: number) => number;
+      // 此时fn变量为函数，且参数必须有两个均为number变量，返回类型也为number变量。
+    ```
+* **array**
+* **tuple**
+* **enum**
+
+### 类型断言
+* 有些情况下，变量的类型对于程序员明确，但TS解析器不清楚。此时，需要通过`类型断言`来告诉编译器变量的类型，(使用类型断言就可以做到`unknown`类型数据给变量赋值)。断言有以下两种形式：
+  * 第一种：**变量 as 类型**
+    * ```ts
+      let someValue: unknown = "this is a string";
+      let strLength: number = (someValue as string).length;
+      ``` 
+  * 第二种：**<类型> 变量**
+    * ```ts
+      let someValue: unknown = "this is a string";
+      let strLength: number = (<string>someValue).length;
+      ```
