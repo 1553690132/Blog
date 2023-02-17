@@ -360,5 +360,92 @@ b = c; // 报错！
 
 
 ## WebPack
+* 通常情况下，实际开发中需要使用构建工具对代码进行打包。
+* 步骤：
+  * **1.初始化项目：**
+    * 进入项目根目录，执行命令`npm init -y`。
+    * 自动创建`package.json`
+  * **2.下载构建工具：**
+    * ```bash
+        npm i -D webpack webpack-cli webpack-dev-server typescript ts-loader clean-webpack-plugin html-webpack-plugin
+      ```
+    * 安装包功能：
+      * **webpack：** 构建工具webpack
+      * **webpack-cli：** webpack的命令行工具
+      * **webpack-dev-server：** webpack的开发服务器
+      * **typescript：** ts编译器
+      * **ts-loader：** ts加载器，用于在webpack中编译ts文件
+      * **html-webpack-plugin：** webpack中的html插件，同于自动创建html文件。
+      * **clean-webpack-plugin：** webpack中的清除插件，每次构建都会先清除目录。  
+  * **3.根目录下创建`webpack.config.js`配置文件**
+    * ```js
+        const path = require('path')
+        const HTMLWebpackPlugin = require('html-webpack-plugin')
+        const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+
+        module.exports = {
+          // 指定入口文件
+          entry: "./src/index.ts",
+
+          // 指定打包文件所在目录
+          output: {
+            // 指定目录
+            path: path.resolve(__dirname, 'dist'),
+            // 指定文件名
+            filename: 'bundle.js'
+          }
+
+          // 指定webpack打包时使用的模块
+          modules: {
+            // 指定加载规则
+            rules: [
+              {
+                // 指定规则生效的文件
+                test: /\.ts$/,
+                // 指定使用的loader
+                use: 'ts-loader',
+                // 指定要排除的文件
+                exclude: /node-modules/
+              }
+            ]
+          },
+
+          // 指定webpack使用的插件
+          plugins: {
+            // 自动清除dist目录下的文件
+            new CleanWebpackPlugin(),
+            // 自动生成HTML文件
+            new HTMLWebpackPlugin({
+              title:'自定义名称',
+              // 指定生成html文件的模板
+              template: './src/index.html'
+            })
+          },
+
+          // 设置引用的模块
+          resolve: {
+            extensions: [".ts", ".js"]
+          }
+        }
+      ``` 
+  * **4.根目录下创建`tsconfig.json`**
+    * ```json
+        {
+          "compilerOptions": {
+            "target": "ES2015",
+            "module": "ES2015",
+            "strict": true
+          }
+        }
+      ```
+  * **5.增加`package.json`下的配置**
+    * ```json
+        "strict": {
+          "test": "echo \"Error: no test specified\" && exit 1",
+          "build": "webpack --mode development",
+          "start": "webpack serve --open --mode development"
+        }
+      ``` 
+  * **6.在src下创建ts文件，命令行执行`npm run build`对代码编译，或执行`npm start`启动开发服务器**（类似vscode插件live-server）
 
 ## Babel
