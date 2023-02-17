@@ -200,7 +200,7 @@ b = c; // 报错！
 * 直接使用tsc指令全局编译的前提是配置`tsconfig.json`文件。
 * `tsconfig.json`是一个JSON文件，添加配置文件后，只需只需 tsc 命令即可完成对整个项目的编译
 * 配置选项：
-  * **include** 
+  * <strong style="color:red">include</strong> 
     * 定义希望被编译的文件所在目录。
     * 默认值：`["**/*"]`，`**`为任意文件夹，`*`为任意文件名。
     * 示例：
@@ -208,7 +208,7 @@ b = c; // 报错！
           "include":["src/**/*", "tests/**/*"]
         ```   
     * src 和 tests目录下的文件都会被编译。
-  * **exclude**
+  * <strong style="color:red">exclude</strong>
     * 定义需要被排除在外的目录。
     * 默认值：`["**/*"]`
     * 示例：
@@ -216,7 +216,7 @@ b = c; // 报错！
           "exclude":["src/**/*", "tests/**/*"]
         ``` 
     * src和 tests目录下的文件都不会被编译。
-  * **extends**
+  * <strong style="color:red">extends</strong>
     * 定义被继承的配置文件。
     * 默认值：`["node_modules","bower_components"]`
     * 示例：
@@ -224,7 +224,7 @@ b = c; // 报错！
           "extends": "./configs/base"
         ```  
     * 当前配置文件会自动包含config目录下base.json中的所有配置文件。
-  * **files**
+  * <strong style="color:red">files</strong>
     * **指定被编译文件的列表**，只有需要编译的文件少时才会用到。
     * 示例：
       * ```json
@@ -236,11 +236,11 @@ b = c; // 报错！
           ]
         ``` 
     * 列表中的文件都会被TS编译器所编译。
-  * **compilerOptions**
+  * <strong style="color:red">compilerOptions</strong>
     * 编译选项是配置文件中的核心选项。
     * `compilerOptions`中包含多个子选项，用来配置编译。
     * 项目选项：
-      * **target**
+      * <strong style="color:red">target</strong>
         * 设置ts代码编译的目标版本。
         * 可选值： 
           * ES3（默认）、ES5、ES6/ES2015、ES7/ES2016、ES2017、ES2018、ES2019、ES2020、ESNext
@@ -251,7 +251,7 @@ b = c; // 报错！
               }
             ```    
           * 如上配置，ts代码将会被编译为ES6版本的js代码。
-      * **lib**
+      * <strong style="color:red">lib</strong>
         * 配置代码运行时所包含的库（宿主环境）
         * 可选值：
           * ES5、ES6/ES2015、ES7/ES2016、ES2017、ES2018、ES2019、ES2020、ESNext、DOM、WebWorker、ScriptHost ......
@@ -261,7 +261,7 @@ b = c; // 报错！
                 "lib": ["DOM", "ES6"]
               }
             ``` 
-      * **module**
+      * <strong style="color:red">module</strong>
         * 设置编译后代码使用的模块化系统。
         * 可选值：
           * CommonJS、UMD、AMD、System、ES2020、ESNext、None
@@ -271,7 +271,7 @@ b = c; // 报错！
                 "module": "CommonJS"
               }
             ```
-      * **outDir**
+      * <strong style="color:red">outDir</strong>
         * 设置编译后文件所在目录。
         * 默认情况下，ts文件和编译后js文件会处于相同的目录，设置outDir可以改变位置。
         * 示例：
@@ -281,7 +281,7 @@ b = c; // 报错！
               }
             ```  
           * 设置后编译的js文件将会处于dist文件夹内。
-      * **outFile**
+      * <strong style="color:red">outFile</strong>
         * 将所有的ts文件编译为一个js文件。
         * 默认会将所有编写在全局作用域中的代码合并为一个js文件，如果`module`指定了`None`、`System`、`AMD`则会将模块一起合并到文件中。
         * 示例：
@@ -290,7 +290,7 @@ b = c; // 报错！
                 "outFile": "dist/app.js"
               }
             ```   
-      * **rootDir**
+      * <strong style="color:red">rootDir</strong>
         * 指定代码的根目录，默认情况下编译后的文件的目录结构会以最长的公共目录为根目录，通过rootDir手动指定根目录。
         * 示例：
           * ```json
@@ -298,9 +298,9 @@ b = c; // 报错！
                 "rootDir": "./src"
               }
             ```    
-      * **allowJs**
+      * <strong style="color:red">allowJs</strong>
         * 是否对js文件进行编译（默认为false）
-      * **checkJs**
+      * <strong style="color:red">checkJs</strong>
         * 是否对js文件进行检查（默认为false）
           * 示例：
           * ```json
@@ -309,53 +309,56 @@ b = c; // 报错！
                 "checkJs": true
               }
             ```     
-      * **removeComments**
+      * <strong style="color:red">removeComments</strong>
         * 是否删除注释。
         * 默认值：false
-      * **noEmit**
+      * <strong style="color:red">noEmit</strong>
         * 不生成编译后文件
         * 默认值：false
-      * **noEmitOnError**
+      * <strong style="color:red">noEmitOnError</strong>
         * 当有错误时不生成编译后js文件。   
         * 默认值：false
-      * **sourceMap**
+      * <strong style="color:red">sourceMap</strong>
         * 是否生成sourceMap
         * 默认值：false
     * 严格检查
-      * **strict**
+      * <strong style="color:red">strict</strong>
         * 启用所有的严格检查，默认为`true`，设置后相当于开启了所有的严格检查。
-      * **alwaysStrict**
+      * <strong style="color:red">alwaysStrict</strong>
         * 总是以严格模式对代码编译。
-      * **noImplicitAny**
+      * <strong style="color:red">noImplicitAny</strong>
         * 禁止隐式的any类型。
-      * **noImplicitThis**
+      * <strong style="color:red">noImplicitThis</strong>
         * 禁止类型不明确的this。
-      * **strictBindCallApply**
+      * <strong style="color:red">strictBindCallApply</strong>
         * 严格检查`apply`、`bind`、`call`的参数列表。  
-      * **strictFunctionTypes**
+      * <strong style="color:red">strictFunctionTypes</strong>
         * 严格检查函数的类型。
-      * **strictNullChecks** 
+      * <strong style="color:red">strictNullChecks</strong> 
         * 严格检查空值。     
-      * **strictPropertyInitialization**
+      * <strong style="color:red">strictPropertyInitialization</strong>
         * 严格检查属性是否初始化。    
     * 额外检查
-      * **noFallthroughCasesInSwitch**
+      * <strong style="color:red">noFallthroughCasesInSwitch</strong>
         * 检查switch语句是否包含正确的break。
-      * **noImplicitReturns**
+      * <strong style="color:red">noImplicitReturns</strong>
         * 检查函数是否有隐式的返回值。
-      * **noUnusedLocals**
+      * <strong style="color:red">noUnusedLocals</strong>
         * 检查未使用的局部变量。
-      * **noUnusedParameters**
+      * <strong style="color:red">noUnusedParameters</strong>
         * 检查未使用的参数。
     * 高级选项
-      * **allowUnreachableCode**
+      * <strong style="color:red">allowUnreachableCode</strong>
         * 检查不可达代码。
         * 可选值：
           * true：忽略不可达代码。
           * false：不可达代码将引起错误。
-      * **noEmitOnError**  
+      * <strong style="color:red">noEmitOnError</strong>  
         * 有错误的情况下不进行编译。
         * 默认值：false
 
 
 
+## WebPack
+
+## Babel
