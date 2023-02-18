@@ -449,3 +449,51 @@ b = c; // 报错！
   * **6.在src下创建ts文件，命令行执行`npm run build`对代码编译，或执行`npm start`启动开发服务器**（类似vscode插件live-server）
 
 ## Babel
+**开发中需要使用`Babel`来对代码进行转换，使其可以兼容到更多的浏览器。**
+* 1.安装依赖包
+  * `npm i -D @babel/core @babel/preset-env babel-loader core-js`
+  * 共安装了四个包，分别是：
+    * **@babel/core**
+      * babel的核心工具
+    * **@babel/preset-env**
+      * babel的预定义环境
+    * **babel-loader**
+      * babel在webpack中的加载器
+    * **core-js**
+      * core-js用来使老版本的浏览器支持新版ES语法。       
+* 2.修改`webpack.config.js`配置文件
+  * ```js
+      module.exports =  {
+        //上述省略
+        modules: {
+          rules: [
+            test: /\.ts$/,
+            use: [
+              {
+                // 指定加载器
+                loader: "babel-loader",
+                // 设置babel
+                options: {
+                  // 设置babel的预定义环境
+                  preset: [
+                    // 指定环境的插件
+                    "@babel/preset-env",
+                    { 
+                      // 要兼容的目标浏览器版本
+                      "targets": {
+                        "chrome": "88",
+                        "ie": "11"
+                      },
+                      // 指定corejs版本
+                      "corejs": "3",
+                      // 指定使用corejs为按需引入
+                      "useBuiltIns": "usage",
+                    }
+                  ]
+                }
+              }
+            ]
+          ]
+        }
+    ```
+* 配置完成后，使用ts编译的文件则会再次被Babel进行处理，使代码可以在大部分浏览器中直接使用。`targets`配置项用于指定兼容的浏览器版本。
