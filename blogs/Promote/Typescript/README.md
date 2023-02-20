@@ -497,3 +497,313 @@ b = c; // 报错！
         }
     ```
 * 配置完成后，使用ts编译的文件则会再次被Babel进行处理，使代码可以在大部分浏览器中直接使用。`targets`配置项用于指定兼容的浏览器版本。
+
+# 面向对象
+
+## 类（class）
+类即为对象的模型，要创建对象，必须先要创建类。
+* **定义类：**
+  * ```ts
+      class 类名 {
+        属性名: 类型; 
+
+        constructor(参数:类型) {
+          this.属性名 = 参数;
+        }
+
+        方法名() {
+          ...
+        }
+      }
+    ``` 
+* **属性前加`readonly`代表只读属性，加`static`代表静态属性，什么都不加则为实例属性。**
+* **示例：**
+  * ```ts
+      class Person {
+        name: string;
+        age: number;
+        static sex: string = 'male'
+
+        constructor(name:string, age: number) {
+          this.name = name;
+          this.age = age;
+        }
+
+        sayHello() {
+          console.log(`Hello, I am ${this.name}!`);
+        }
+      }
+    ``` 
+* **使用类：**
+  * ```ts
+      const p = new Person('lwh', 18);
+      p.sayHello();
+    ``` 
+
+### 构造函数
+**`constructor`** 方法定义，每次创建对象实例时调用，其内部`this`代表当前对象实例。
+```ts
+class Person {
+  name: string;
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+```
+
+:::tip
+**定义类的简便写法：**
+```ts
+class Obj {
+  constructor(public name: string, public: number) {
+    this.name = name;
+    this.age = age;
+  }
+  // 此时不需要在外部定义属性
+}
+```
+:::
+
+## 面向对象的特点
+### 封装
+* 对象实质上是属性和方法的容器，用于存储属性和方法。
+* 默认情况下，对象的属性和方法可以任意修改，为保证数据安全性，可以对属性和方法添加修饰符。
+* **只读属性readonly**
+  * 若在声明属性时添加readonly，则属性变为只读属性后续无法修改。
+
+* TS中具有三种修饰符：
+  * **public：** 默认情况下的修饰符，可以在任意位置对属性或方法进行访问或修改。
+  * **private：** 私有修饰符，只能在当前类中对属性或方法进行访问或修改。
+  * **protected：** 修饰受保护的属性，只能在当前类或子类中对属性或方法进行访问或修改。
+  * 实例：
+    * public：
+      * ```ts
+          class Person {
+            public name: string; // 写或什么都不写都是public
+            public age: number;
+
+            constructor(name: string, age: number){
+              this.name = name; // 可以在类中修改
+              this.age = age;
+            }
+
+            sayHello(){
+              console.log(`大家好，我是${this.name}`);
+            }
+          }
+
+          class Employee extends Person{
+          constructor(name: string, age: number){
+              super(name, age);
+              this.name = name; //子类中可以修改
+            }
+          }
+
+          const p = new Person('孙悟空', 18);
+          p.name = '猪八戒';// 可以通过对象修改
+        ``` 
+    * protected:
+      * ```ts
+          class Person{
+              protected name: string;
+              protected age: number;
+
+              constructor(name: string, age: number){
+                this.name = name; // 可以修改
+                this.age = age;
+              }
+
+              sayHello(){
+                  console.log(`大家好，我是${this.name}`);
+              }
+            }
+
+          class Employee extends Person{
+
+              constructor(name: string, age: number){
+                  super(name, age);
+                  this.name = name; //子类中可以修改
+              }
+          }
+
+          const p = new Person('孙悟空', 18);
+          p.name = '猪八戒';// 不能修改         
+        ``` 
+    * private:
+      * ```ts
+          class Person {
+            private name: string;
+            private age: number;
+
+            constructor(name: string, age: number) {
+              this.name = name;
+              this.age = age;
+            }
+
+            sayHello() {
+              console.log(`大家好我是${this.name}`)
+            }
+          }
+
+          class Employee extends Person {
+            constructor(name: string, age: number) {
+              super(name, age);
+              this.name = name; // 子类中不能修改
+            }
+          }
+
+          const p = new Person('孙悟空', 18);
+          p.name = '猪八戒'; // 不能修改
+        ``` 
+
+* **属性存取器**
+  * 在类中定义一组用于读取、设置属性的方法，称之为属性的存取器。
+  * 读取属性的叫做getter方法，修改属性的方法叫做setter方法。
+  * 示例：
+    * ```ts
+        class Person {
+          private _name: string;
+          
+          constructor(name: string) {
+            this._name = name;
+          }
+
+          get name() {
+            return this._name;
+          }
+
+          set name(value) {
+            this._name = value;
+          }
+        }
+
+        const p = new Person('lwh')l
+        console.log(p.name); // 通过getter方法读取name属性
+        p.name = 'zzz'; // 通过setter方法设置name属性
+      ``` 
+
+* **静态属性**
+  * 静态属性（方法），又称为类属性。使用静态属性无需创建实例，可通过类直接使用。
+  * 使用`static`关键字定义开头。
+  * 示例：
+    * ```ts
+        class Tools {
+          static PI = 3.1415926;
+
+          static sum(num1: number, num2: number) {
+            return num1 + num2;
+          }
+        }
+
+        console.log(Tools.PI);
+        console.log(Tools.sum(123, 456));
+      ``` 
+
+
+### 继承 
+* 通过继承`extends`可以将其它类中的属性和方法引入到当前类中，可以在不修改类的情况下实现对类的扩展。
+* 示例：
+  * ```ts
+      class Animal {
+        constructor(public name: string, public age: number) {
+          this.name = name;
+          this.age = age;
+        }
+      }
+
+      class Dog extends Animal {
+        constructor(name: string, age:number, public sex: string) {
+          super(name, age);
+          this.sex = sex;
+        }
+      }
+
+      const dog1 = new Dog('旺财', 4, 'male');
+    ``` 
+
+* **重写：**
+  * 发生继承时，子类中与父类同名的方法会发生替换。
+  * 示例：
+    * ```ts
+        class Animal {
+          constructor(public name: string) {
+            this.name = name;
+          }
+          sayHello() {
+            console.log('Hello!')
+          }
+        }
+
+        class Dog extends Animal {
+          sayHello() {
+            console.log(`Hello, ${this.name}`)
+          }
+        }
+      ``` 
+
+* **抽象类**
+  * 抽象类是专门用来被其它类所继承的类，只能被其他类继承，不能创建自身实例对象。
+  * 使用`abstract`开头的方法叫做抽象方法，抽象方法没有方法体只能定义在抽象类中，继承抽象类时抽象方法必须要实现
+  * ```ts
+      abstruct class Animal {
+        // 抽象类中的抽象方法只能定义方法名而无方法体！
+        abstruct run(): void;
+        bark() {
+          console.log('动物在叫!')
+        }
+      }
+
+      class Dog extends Animal {
+        // 子类必须实现抽象类中的抽象方法！
+        run() {
+          console.log('狗在跑!')
+        }
+      }
+    ```
+
+## 接口（interface）
+**接口类类似于抽象类，但<strong style="color:orange">接口中所有方法和属性都不具有实值</strong>，即接口中所有方法都为抽象方法。**
+* 接口主要负责定一个类的结构，用于去限制一个对象的结构。
+* 对象只有包含接口中所有的属性和方法时才能匹配接口。
+* 实现类去实现接口时，要保护接口中的所有属性和方法。
+* 示例（检查对象类型）：
+  * ```ts
+      interface Person {
+        name: string;
+        age: number;
+        sayHello() :void;
+      }
+
+      function fn(per: Person) {
+        per.sayHello();
+      }
+
+      fn({'lwh', 18, sayHello() {console.log(`Hello! I am ${this.name}~`)}});
+
+      // 类似于描述对象类型
+      type myType = {
+        name: string;
+        age: number;
+      }
+
+      const obj: myType = {
+        name: 'lwh',
+        age: 18
+      }
+    ``` 
+* 示例（实现）
+  * ```ts
+      interface Person {
+        name: string;
+        sayHello(): void;
+      }
+
+      class Student implements Person {
+        constructor(public name: string) {
+          this.name = name;
+        }
+        sayHello() {
+          console.log('Hello Vue!');
+        }
+      }
+    ``` 
