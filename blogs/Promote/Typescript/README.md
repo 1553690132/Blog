@@ -807,3 +807,49 @@ class Obj {
         }
       }
     ``` 
+
+
+## 泛型
+* 定义一个变量或方法时，有些情况下无法明确要使用的具体类型（返回值、参数、属性的类型不能确定），此时采用泛型。
+* 示例：
+* ```ts
+    function test(a: any): any {
+      return a;
+    }
+  ```
+  * 上述代码，返回值和参数应类型相同，但由于类型不确定故都使用any类型。但any会关闭TS的类型检查，故需要采取泛型解决。
+  * ```ts
+      function test<T>(a: T): T {
+        return a;
+      }
+    ```
+  * 调用方式：
+    * 直接调用：`test(10)`,类型会由TS自身推断出来。
+    * 指定类型：`test<number>(10)`
+* 可以同时指定多个泛型，泛型间使用逗号分隔。
+  * ```ts
+      function fn<T, K>(a: T, b: K): a {
+        return a;
+      }
+
+      fn<string, number>('lwh', 18);
+    ```
+* 类中也可以使用泛型
+  * ```ts
+      class MyClass<T> {
+        prop: T;
+        constructor(prop: T) {
+          this.prop = prop;
+        }
+      }
+    ``` 
+* 可以使用接口对泛型进行约束，使用`extends`继承接口的实现类。
+  * ```ts
+      interface MyInter {
+        length: number;
+      }
+
+      function fn<T extends MyInter>(a: T): number {
+        return a.length;
+      }
+    ``` 
