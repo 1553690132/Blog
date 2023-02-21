@@ -267,7 +267,223 @@ class Snake {
 ```
 
 ## 键盘事件使蛇移动
+* 创建整体控制类GameControl，用于对其他类的整合。
+```ts
+import Snake from "./Snake"
+import Food from "./Food"
+import ScorePanel from "./ScorePanel"
+
+class GameControl {
+    snake: Snake;
+    food: Food;
+    scorePanel: ScorePanel;
+    direaction: string = '';
+
+    constructor() {
+        this.snake = new Snake();
+        this.food = new Food();
+        this.scorePanel = new ScorePanel();
+        this.init();
+    }
+
+    init() {    
+        // bind函数保证回调函数的this指向仍然为GameControl类
+        document.addEventListener('keydown', this.keydownHandler.bind(this));
+        this.run();
+    }
+
+    run() {
+        switch(direction) {
+            case "ArrowUp":
+            case "Up":
+                Y -= 10;
+                break;
+            case "ArrowDown":
+            case "Down":
+                Y += 10;
+                break;
+            case "ArrowLeft":
+            case "Left":
+                X -= 10;
+                break;
+            case "ArrowRight":
+            case "Right":
+                X += 10;
+                break;
+        }
+    }
+
+
+    keydownHandler(event: KeyBoardEvent) {
+        this.direction = event.key;
+    }
+}
+```
 
 ## 碰撞与吃食检测
+* 对`GameControl.ts`文件进行完善，使当前蛇在按下键盘后开始自动移动。
+* 碰撞检测在`Snake.ts`中进行，在蛇头的横纵坐标发生变化时判断抛出异常。
+* 碰撞情况即下一步位置超过0或290像素，且发生碰撞后游戏结束。
+* 吃到食物时，蛇身增加、分数增加、食物重新生成。
+* `GameControl`类
+```ts
+import Snake from "./Snake"
+import Food from "./Food"
+import ScorePanel from "./ScorePanel"
+
+class GameControl {
+    snake: Snake;
+    food: Food;
+    scorePanel: ScorePanel;
+    direaction: string = '';
+    isAlive: boolean = true;
+    speed: number = 330;
+
+    constructor() {
+        this.snake = new Snake();
+        this.food = new Food();
+        this.scorePanel = new ScorePanel();
+        this.init();
+    }
+
+    init() {    
+        // bind函数保证回调函数的this指向仍然为GameControl类
+        document.addEventListener('keydown', this.keydownHandler.bind(this));
+        this.run();
+    }
+
+    run() {
+        let X = this.snake.X;
+        let Y = this.snake.Y;
+
+        switch(direction) {
+            case "ArrowUp":
+            case "Up":
+                Y -= 10;
+                break;
+            case "ArrowDown":
+            case "Down":
+                Y += 10;
+                break;
+            case "ArrowLeft":
+            case "Left":
+                X -= 10;
+                break;
+            case "ArrowRight":
+            case "Right":
+                X += 10;
+                break;
+        }
+        checkEat(X, Y);
+
+        try {
+            this.snake.X = X;
+            this.sname.Y = Y;
+        } catch(error) {
+            alert('GAME OVER');
+            isAlive = false;
+        }
+
+        // 蛇存活时继续进行移动，且direction为当前方向继续移动。
+        isAlive && setTimeOut(this.run.bind(this), this.speed - this.scorePanel.level * 30);
+    }
+
+    keydownHandler(event: KeyBoardEvent) {
+        this.direction = event.key;
+    }
+
+    checkEat(x: number, y:number) {
+        if(x === this.food.X && y === this.food.Y) {
+            this.snake.addBody();
+            this.food.change();
+            this.scorePanel.addScore();
+        }
+    }
+}
+```
+
+* `Snake`类
+```ts
+class Snake {
+    // 上述代码省略
+
+    set X(value: number) {
+        if(value < 0 || value > 290) {
+            throw new Error('发生碰撞');
+        }
+        this.headEle.style.left = value + 'px';
+    }
+
+    set Y(value: number) {
+        if(value < 0 || value > 290) {
+            throw new Error('发生碰撞');
+        }
+        this.headEle.style.top = value + 'px';
+    }
+
+}
+```
 
 ## 最后完善
+* 蛇的移动，即蛇身需要跟随蛇头移动。采取从后往前改变位置的方式进行（链表思想，确保数据未丢失）。
+* 蛇不能移动反方向，即蛇当有身体时不可能直接向反方向移动，需要另做判断。
+```ts
+class Snake {
+    // 上述代码省略
+    // 公共部分抽离为方法
+    set X(value: number) {
+        configLocation(this.X, value, 'x');
+    }
+
+    set Y(value: number) {
+        configLoaction(this.Y, value, 'y');
+    }
+
+    configLoaction(coordinate: number, distance: number, direction: string) {
+        // 若当前X或Y未改变直接返回，减少操作。
+        if(coordinate === distance) return ;
+        if(distance < 0 && distance > 290) {
+            throw new Error('碰撞');
+        }
+        if(direction === 'x') {
+            // 判断有身子时，不能直接逆向走。
+            if(this.bodysEle[1] && (this.bodysEle as HTMLElement).offsetLeft === distance) {
+                distance > this.X ? distance = this.X - 10 : distance = this.X + 10;
+            }
+            this.moveBody();
+            this.headEle.style.left = distance + 'px'; 
+        } else {
+            if(this.bodysEle[1] && (this.bodysEle as HTMLElement).offsetTop === distance) {
+                distance > this.Y ? distance = this.Y - 10 : distance = this.Y + 10;
+            }
+            this.moveBody();
+            this.headEle.style.top = distance + 'px';
+        }
+        this.checkHeadBody();
+    }
+
+    // 身体移动方法
+    moveBody() {
+        for(let i = this.bodysEle.length - 1; i > 0; i--) {
+            let preX = (this.bodysEle[i - 1] as HTMLElement).offsetLeft;
+            let preY = (this.bodysEle[i - 1] as HTMLElement).offsetTop;
+            (this.bodysELe[i] as HTMLElement).style.left = preX + 'px';
+            (this.bodysELe[i] as HTMLElement).style.top = preY + 'px';
+        }
+    }
+
+    // 检查头部碰撞
+    checkHeadBody() {
+        for(let i = 1; i < this.bodysELe.length; i++) {
+            let x = (this.bodysEle[i] as HTMLElement).offsetLeft;
+            let y = (this.bodysEle[i] as HTMLElement).offsetTop;
+            if(this.X === x && this.Y === y) {
+                throw new Error('头部和身体发生碰撞!');
+            }
+        }
+    }
+}
+```
+
+
+<a href="https://github.com/1553690132/WebStudy_promote/tree/main/Typescript/part5_snake" style="font-weight:700">项目地址</a>
