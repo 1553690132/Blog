@@ -8,9 +8,9 @@ categories:
 sidebar: auto
 ---
 
-## 前端知识
+# 前端知识
 
-#### 1. `ES6`新特性：
+## 1. `ES6`新特性：
 
 * let、const：变量声明拥有**块作用域**，不会变量提升，但会暂时性死区。
 * 解构赋值：`const a = {...obj, val1:1, val2:2}` 即扩展运算符...
@@ -23,7 +23,7 @@ sidebar: auto
 * Promise
 * ESModule的新增：import、export
 
-#### 1-2. let、var、const区别
+## 1-2. let、var、const区别
 
 * let、const不能重复定义。let可以重复赋值，const不行。
 * let、const没有var存在的变量提升。
@@ -31,7 +31,7 @@ sidebar: auto
 * let、const存在暂时性死区，即定义的变量实际已存在，但只有到定义的那一行才可以被访问。
 * const声明时必须赋值。
 
-#### 2.回流和重绘
+## 2.回流和重绘
 
 * 重绘`Repaint`：盒模型已经布局好，对其进行绘制的过程。在改变元素外观时进行，outline、颜色背景色。
 
@@ -65,7 +65,7 @@ sidebar: auto
   * 禁止一条条修改class样式，应预定义样式直接修改DOM的className
   * 动画过程中采用`transform：translateZ(0)`开启`GPU`硬件加速
 
-#### 3.类型判断
+## 3.类型判断
 
 * **JS类型：String、BigInt、Number、Symbol、Null、Undefined、Boolean**
 * `typeof`：返回字符串，表示类型。（string、null(object)、undefined、symbol、number、function、bigint、boolean）**对基本类型判断准确，无法精确判断引用数据类型（null和Array都会识别为object）**
@@ -75,7 +75,7 @@ sidebar: auto
   * 为什么使用object原型对象的tostring而不是对象自身原型的tostring：许多对象的tostring被改写，而object的tostring允许被修改，所以使用object来进行判断。
 
 
-#### 4.`ESModule`和`CommonJS`区别
+## 4.`ESModule`和`CommonJS`区别
 
 * ESModule：export导出、import导入
 * CommonJS：module.exports、exports导出，require导入
@@ -84,7 +84,7 @@ sidebar: auto
 * ESModule在静态编译期间确定模块依赖、CommonJS运行时加载模块
 * ESModule导出引用规则，内部修改可以同步到外部，CommonJS导出的是值拷贝，进行缓存，内部修改不会同步至外部
 
-#### 5.三栏布局
+## 5.三栏布局
 
 * 流体布局float：左右浮动，中间margin控制距离。
 
@@ -543,7 +543,7 @@ sidebar: auto
   </html>
   ```
 
-#### 6. `CSS3`新特性
+## 6. `CSS3`新特性
 
 * border-radius：圆角边框
 * box-shadow：边框阴影（参数：X轴偏移量、Y轴偏移量、阴影模糊半径、阴影扩展半径、颜色、投影方式[ inset为内部投影，省略则为外部 ]）
@@ -567,12 +567,12 @@ sidebar: auto
   * flex-basis：规定了flex元素在主轴方向的初始大小。
 
 
-#### 7. 正向代理、反向代理
+## 7. 正向代理、反向代理
 
 * **正向代理**是指客户端向目标服务器请求资源时向正向代理服务器发送请求，并指定目标服务器，然后代理服务器向目标服务器转发请求，将内容返回给客户端。一般正向代理需要在客户端进行一些特殊的设置才行，主要解决了访问限制的问题
 * **反向代理**是指代理服务器来接收客户端的请求，然后再将请求转发给内部网络上的服务器，将服务器上的结果返回给客户端。对于客户端来说，反向代理就相当于目标服务器，一般客户端不需要进行特殊配置，一般提供负载均衡，安全防护的作用
 
-#### 8. 跨域
+## 8. 跨域
 
 * 违反浏览器的同源策略机制（js脚本无法和另外一个域进行交互），即为跨域。**同源策略：** 即端口、协议、域名不同。
 * HTML允许跨域的标签：img、link、script
@@ -691,7 +691,7 @@ sidebar: auto
   </script>
   ```
 
-#### 9. `CSS`三角
+## 9. `CSS`三角
 
 * 对不设置高度宽度的盒子设置border达到三角，一处为有色、两侧为透明、对应一处为0
 
@@ -729,7 +729,7 @@ sidebar: auto
   </html>
   ```
 
-#### 10. 画`0.5px`的线
+## 10. 画`0.5px`的线
 
 * box-shadow实现：阴影模糊扩展半径设置为`0.5px`
 
@@ -846,7 +846,7 @@ sidebar: auto
   </html>
   ```
 
-#### 11. Cookie、Token、Session
+## 11. Cookie、Token、Session
 
 * Cookie：在**客户端**保存HTTP状态，HTTP请求头携带cookie进行访问。cookie由k-v键值对组成，每个cookie大小限制为`4kb`。通过`setMaxAge` 设置cookie有效期，浏览器访问服务器会在响应头中添加set-cookie字段用于将cookie返回给浏览器。
 * Session：在**服务端**保存HTTP状态，web服务器开辟空间保存所有的session，每个session都有对应的`sessionID`，为了防止溢出，每个session都有有效期`（30min）`，有效期内未访问则判定用户离线删除该session。**服务器端的session和客户端的cookie**息息相关，通常`sessionID`存放在cookie中，当第一次请求时会创建session对象，将`sessionID`放入响应头的set-cookie中，下次请求cookie就会携带`sessionID`发送至服务器。
@@ -854,7 +854,7 @@ sidebar: auto
   * token登录流程：① 客户端使用账号密码登录。② 服务端收到请求后，验证账号密码。③ 验证成功后，服务端签发一个token发送给客户端。④ 客户端收到token后本地存储在浏览器中。⑤ 客户端每次向服务端请求资源时都要携带该token。⑥ 服务端收到请求后验证token，成功后返回数据。
 
 
-#### 12. cookie和webStorage的区别
+## 12. cookie和webStorage的区别
 
 * cookie是存储在客户端用于和服务器进行会话使用的信息载体。目的是辨别用户身份，只能存储4kb左右数据。
 * `webStorage`类似于cookie，是浏览器本地存储的新方式，存储量更大，且不会像cookie一样请求一次就会携带一次。
@@ -863,19 +863,19 @@ sidebar: auto
 * `webStorage`是以字符串形式进行存储，存储对象需要用到`JSON.stringify`和`JSON.parse`
 * 区别：大小不同，数据有效期不同，作用域不同（`localStorage`和cookie在同源窗口中共享，`sessionStorage`不在不同的浏览器窗口中共享）
 
-#### 13. Vue的template怎么生成AST
+## 13. Vue的template怎么生成AST
 
 * `vue`中，模板会被解析成抽象语法树`AST`，然后被转化为渲染函数，最终渲染为DOM。
 * `vue`中的模板编译器将模板解析成一个`AST`、`AST`是由一系列节点组成的树形结构。节点为vue中的DOM、指令、文本等。模板编译器将模板中的元素区分存储在对象中，最后将这些节点转化为`VNode`(虚拟节点)树。
 * `vue`通过比较新旧`VNode`树，进行高效更新，是响应式渲染的核心所在。
 
-#### 14. Vue中的nextTick
+## 14. Vue中的nextTick
 
 * `vue`中对组件进行状态属性修改时，组件不会立即更新，而是会再下一个事件循环中更新，由于vue更新是异步的这样做可以节省性能。
 * 若需要在更新组件状态后立即获取更新后的DOM、则需要使用nextTick方法。
 * `nextTick`接收回调函数作为参数，回调函数在下一次事件循环中执行，且可以获取到更新后的DOM，且`nextTick`会返回一个Promise对象，可以使用`async`、`await`进行取值。
 
-#### 15. 原型链
+## 15. 原型链
 
 * 每个函数对象(构造函数)都会拥有一个原型`prototype`其指向该函数的原型对象。
 * 每个对象同样拥有`__proto__`属性，其指向这个对象的原型对象。
@@ -883,7 +883,7 @@ sidebar: auto
 * 寻找元素和方法会首先在自身上寻找，其次才会去循着原型链进行寻找。
 * 原型对象上挂载一些公用方法，避免了内存的浪费。
 
-#### 16. `Vue2`响应式原理
+## 16. `Vue2`响应式原理
 
 * `vue2`实现响应式核心是**`Object.defineProperty`**方法.
 
@@ -937,7 +937,7 @@ sidebar: auto
   }
   ```
 
-#### 16-2. 收集依赖与派发更新
+## 16-2. 收集依赖与派发更新
 
 * 对observer的优化，将其封装为类对象：
 
@@ -1233,7 +1233,7 @@ sidebar: auto
   })
   ```
 
-#### 16-3. 发布订阅模式
+## 16-3. 发布订阅模式
 
 * 包括：发布者、订阅者、第三方
 
@@ -1250,7 +1250,7 @@ sidebar: auto
 
 * 发布订阅模式与观察者模式相比，具有第三方这个媒介。
 
-#### 17. `Vue3`响应式原理
+## 17. `Vue3`响应式原理
 
 * `vue3`实现响应式使用的是`proxy`代理（拦截对象属性的增删改），`reflect`反射去处理。
 
@@ -1274,7 +1274,7 @@ sidebar: auto
   * proxy对代理对象的监听更完善。
   * proxy代理对象会生成新的对象，不会修改被代理对象本身。
 
-#### 18. 函数
+## 18. 函数
 
 * 函数声明：`function add(a, b) {return a + b;}`
 * 表达式定义：`var sum = function(a, b) {return a + b;}`
@@ -1284,7 +1284,7 @@ sidebar: auto
 
 * 普通函数默认返回值为undefined，构造函数默认返回值为新创建的对象。
 
-#### 19. 杂题
+## 19. 杂题
 
 * **盒子快速居中：**父盒子display(flex)，子盒子`margin：auto`
 
@@ -1331,7 +1331,7 @@ sidebar: auto
   * 
 
 
-#### 20. 前端性能优化
+## 20. 前端性能优化
 
 * 加载：
 
@@ -1347,7 +1347,7 @@ sidebar: auto
 
 * 减少DOM操作，避免`reflow`。利用文档碎片`createDocumentFragment`存放DOM统一处理。
 
-#### 21. 图片懒加载
+## 21. 图片懒加载
 
 * 利用自定义属性例如`data-src’`存放图片真实路径，src存放加载路径，在用户滑动至相应区域时加载图片发出请求。
 
@@ -1387,7 +1387,7 @@ sidebar: auto
   ```
 
 
-#### 22. this指向
+## 22. this指向
 
 * 默认绑定：一般this指向window，函数this指向其调用者，严格模式下指向undefined。
 
@@ -1396,11 +1396,11 @@ sidebar: auto
 * new绑定：构造函数内的this指向创建出来的实例。
 * 箭头函数没有this，其this为上一层this指向。（使用call、apply、bind改变this指向）
 
-#### 23. 作用域链
+## 23. 作用域链
 
 * 函数查找变量，会先从自身开始，逐层往上查找，最终找到全局作用域。
 
-#### 24. 闭包
+## 24. 闭包
 
 * 为避免变量被污染、实现数据私有化，保存变量不被垃圾回收。（防抖节流、封装库）
 
@@ -1418,7 +1418,7 @@ sidebar: auto
   const p = fn();
   ```
 
-#### 25.  new关键字
+## 25.  new关键字
 
 * 用于实例化一个对象。
 
@@ -1434,7 +1434,7 @@ sidebar: auto
 
 * `let obj1 = Object.create(null) `和 `let obj2 = {}`区别：`obj1`为纯净对象，没有原型链，而`obj2`默认具有原型链指向Object。
 
-#### 26.  事件委托
+## 26.  事件委托
 
 * 事件执行分为事件捕获和事件冒泡阶段，通常情况下事件是在事件冒泡阶段执行的，
 * 事件委托是利用事件冒泡，只设置一个事件，管理所有同一类型的事件。（利用`e.target`）
@@ -1442,7 +1442,7 @@ sidebar: auto
 
 * 优点：提高性能、减少事件的绑定、减少内存占用。
 
-#### 27. jQuery入口函数的优点
+## 27. jQuery入口函数的优点
 
 * jquery的入口函数是匿名自执行函数
 
@@ -1454,7 +1454,7 @@ sidebar: auto
   })(window)
   ```
 
-#### 28. CSS权值
+## 28. CSS权值
 
 * !important > style行内样式 > ID选择器 > 伪类选择器 = 属性选择器 = 类名选择器 > 元素名选择器 > 通配符
 * style：1000
@@ -1463,7 +1463,7 @@ sidebar: auto
 * 元素名：1
 * 通配符：0
 
-#### 29. 防抖和节流
+## 29. 防抖和节流
 
 * 防抖：用户触发事件过于频繁，只保留最后一件事操作。
 
@@ -1496,7 +1496,7 @@ sidebar: auto
   }
   ```
 
-#### 30. Promise
+## 30. Promise
 
 * 为了避免使用回调函数产生的“回调地狱”的ES6新异步解决方法。
 * 其有三种状态：pending（待定），fulfilled（已兑现），rejected（已拒绝）
@@ -1563,7 +1563,7 @@ sidebar: auto
   }
   ```
 
-#### 31. async await
+## 31. async await
 
 * ES7提出的用于提升Promise可读性的语法糖
 
@@ -1584,12 +1584,12 @@ sidebar: auto
 
 * forEach不支持使用async和await。
 
-#### 31-2. promise和async、await的区别
+## 31-2. promise和async、await的区别
 
 * promise是返回对象，必须使用then和catch进行处理。书写方式为链式，容易造成代码重叠，难以维护。而async和await是使用try、catch捕获异常。
 * async await最大优点可以使代码强制同步，只要遇到await就会停止向下执行直到拿出结果。而promise.then会出现请求还没返回，就向下执行。
 
-#### 32 事件循环 eventloop
+## 32 事件循环 eventloop
 
 * 由于JS单线程的机制，防止代码阻塞，将代码分为同步和异步。
 
@@ -1597,7 +1597,7 @@ sidebar: auto
 * 异步代码：先放入宿主环境(浏览器/Node)中，不必原地等待结果，不阻塞主线程继续执行，异步结果在将来执行。
 * 同步代码先放入**执行栈**中，从前往后执行。**异步代码**先放**宿主环境**中，等待时机后放入**任务队列**中。执行栈执行完后去任务队列中检查，将任务队列中的异步任务放入执行栈中执行。执行栈执行完后还会回到任务队列中查找。反复循环过程就是事件循环。
 
-#### 33. 宏任务 微任务
+## 33. 宏任务 微任务
 
 * 异步任务可分为宏任务和微任务。
 * process.nextTick：在当前tick执行完毕后，下一个宏任务执行之前调用（可以看作最早执行的那个微任务）。
@@ -1612,7 +1612,7 @@ sidebar: auto
 * 执行栈中代码执行完毕后会先从微任务队列中寻找异步任务，等待所有的微任务执行完毕后再去宏任务队列中寻找异步代码执行。
 * 执行顺序：同步代码->process.nextTick->微任务->宏任务->setImmediate
 
-#### 34. render函数和template异同点
+## 34. render函数和template异同点
 
 * 都被称为vue中的类编译器。render函数将template模板转化为真实的DOM元素。
 
@@ -1648,16 +1648,16 @@ sidebar: auto
   </script>
   ```
 
-#### 35. 数据劫持
+## 35. 数据劫持
 
 * 访问或修改某个对象的值时，通过代码来拦截行为，进行额外的操作。
 * Vue2是基于Object.defineProperty进行响应式处理的，通过watcher和属性数据的依赖关联，依赖项发生变化时（setter触发时）Dep提示wathcer变化，关联的组件重新渲染。
 * Object.defineProperty不足：对于数组，（pop、push、unshift、shift、reverse、sort、splice）修改原数组的方法无法被setter监听到。对于对象，只能监听对象原有数据是否被修改，不能监听到对象是否新增或删除属性。
 * vue3采取proxy数据代理，性能优于Object.defineProperty，Proxy可以监听到数组的变化和对象属性的新增和删除。
 
-#### 36. 虚拟DOM&Diff算法
+## 36. 虚拟DOM&Diff算法
 
-#### 37. 浏览器缓存
+## 37. 浏览器缓存
 
 * 浏览器缓存是浏览器在本地磁盘对用户最近请求过的文档进行存储，当访问者再次访问同一页面时，浏览器就可以直接从本地磁盘加载文档。
 * 浏览器缓存优点：① 减少冗余数据传输。② 减少服务器负担、提升网站性能。③ 加快客户端加载网页速度。
@@ -1682,7 +1682,7 @@ sidebar: auto
 
 <img src="https://img-blog.csdnimg.cn/20210328152529389.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM5OTAzNTY3,size_16,color_FFFFFF,t_70" alt="img" style="zoom:80%;" />
 
-#### 38. xss攻击
+## 38. xss攻击
 
 * 即Cross Site Script 跨站脚本攻击。
 * 分为DOM攻击、反射攻击、存储攻击
@@ -1694,7 +1694,7 @@ sidebar: auto
   * 改为纯前端渲染，将代码和数据分开。
   * 对HTML进行转义，将`&、<>、"、'`使用插件进行转义。
 
-#### 39. CSRF攻击
+## 39. CSRF攻击
 
 * 即Cross-Site Request Forgery 跨站请求伪造
 * 利用cookie的登录态和跨域伪造请求。
@@ -1703,18 +1703,18 @@ sidebar: auto
   * cookie双重验证。
   * 利用token替代cookie。
 
-#### 40. 对称加密和非对称加密
+## 40. 对称加密和非对称加密
 
 * 对称加密：即单密钥加密，优点：算法公开、计算量小、解密速度快，适用于数量大的数据。缺点：密钥管理和分配存在风险。
 * 非对称加密：加密过程使用密钥对（公钥和私钥），公钥人人可见、私钥自己保管不外泄。一个用来加密、另一个用来解密。优点：安全性高。缺点：加密解密时间长，速度慢，需要更多计算资源只适用于少量数据加密。
 
-#### 41. HTTP和HTTPS
+## 41. HTTP和HTTPS
 
 * http协议传输数据都是未加密的，即明文。所以产生了SSL证书用于加密http传输的数据，即https。
 * http是明文传输的超文本传输协议。https是具有安全性的ssl加密传输协议。
 * http端口是80、https端口是443。
 
-#### 42. 状态码
+## 42. 状态码
 
 * **1XX：信息性**  表示临时响应，即请求还在进行中。
   * 100：继续
@@ -1740,7 +1740,7 @@ sidebar: auto
   * 504：网关超时。
   * 505：服务器不支持请求的HTTP版本。
 
-#### 43. CSS中可以被继承的属性
+## 43. CSS中可以被继承的属性
 
 * 字体属性：font、font-size、color
 * 文本属性：line-height、text-align
@@ -1748,17 +1748,17 @@ sidebar: auto
 * 表格布局属性：border-spacing
 * 列表属性：list-type
 
-#### 44. 内存泄漏
+## 44. 内存泄漏
 
 * JS中已分配地址的对象，由于长时间没有释放或者无法清除，造成长期占用。内部大幅占用，导致运行缓慢，甚至崩溃。
 * 导致因素：未清空的定时器、过度使用闭包、未声明就直接赋值的变量。
 
-#### 45. 基本数据类型&引用数据类型
+## 45. 基本数据类型&引用数据类型
 
 * 基本数据类型保存在栈内存中，保存的是具体值。
 * 引用数据类型保存在堆内存中，保存的是引用数据类型的地址。
 
-#### 46. JS继承
+## 46. JS继承
 
 * 原型链继承：子类通过原型链链接父类。
 
@@ -1841,7 +1841,7 @@ sidebar: auto
     new Son('Admin', 18, 'man').says()
     ```
 
-#### 47. 杂题
+## 47. 杂题
 
 * setTimeout最小执行时间是4ms、setInterval最小执行时间是10ms
 * 高度塌陷和上边距重叠：
@@ -1849,7 +1849,7 @@ sidebar: auto
   * 外边距计算：正数和正数情况取最大的值，负数和负数取绝对值最大的值。
 * 
 
-#### 48. Ajax
+## 48. Ajax
 
 * 在不重新加载整个网页的前提下，与服务器交换数据并更新部分内容。
 
@@ -1919,7 +1919,7 @@ sidebar: auto
   * get请求刷新服务器或退回是无影响的，而post退回会重新提交数据。
   * get请求会被保存在浏览器历史记录中，而post则不会。
 
-#### 49. 浏览器渲染页面过程
+## 49. 浏览器渲染页面过程
 
 * 渲染引擎通过网络获得请求文档的内容。
 
@@ -1937,20 +1937,20 @@ sidebar: auto
 
   ![image-20230412095107622](C:\Users\LWH\AppData\Roaming\Typora\typora-user-images\image-20230412095107622.png)
 
-#### 50. DOM树和渲染树区别
+## 50. DOM树和渲染树区别
 
 * DOM树与HTML标签一一对应，包括head和隐藏元素。
 * 渲染树render tree不包含head和隐藏元素。
 * DOM树和CSSOM合并生成渲染树。
 
-#### 51. 精灵图&Base64&svg
+## 51. 精灵图&Base64&svg
 
 * 精灵图：将多张小图整合在一张大图上，利用background-position进行显示。减少图片请求、提高加载速度。
 * Base64：将图片以二进制编码形式使用，base64会和html、css一起下载到浏览器中可以减少请求和跨域问题。但体积如果大于原图片大小，则不利于css加载。
 
 * svg：基于XML的图像格式，体积小且不会失真，本质是文本文件。可以被DOM和js操作。
 
-#### 52. JWT
+## 52. JWT
 
 * JSON Web Token：通过JSON形式作为在web中的令牌，可以在各方之间安全的把信息作为JSON对象传输、授权等。
 * 认证流程：
@@ -1961,12 +1961,12 @@ sidebar: auto
 
 * 优点：简洁、Token是以JSON加密的形式保存在客户端，原则上任何web形式都支持。
 
-#### 53. npm
+## 53. npm
 
 * node package manager：node的包管理和分发工具。是node模块的标准，是JS的运行环境。
 * 组成：网站、注册表、命令行工具
 
-#### 54. HTTP协议的协议头和请求头
+## 54. HTTP协议的协议头和请求头
 
 * 请求头信息：浏览器->服务器
   * Accept：支持的数据类型
@@ -1983,7 +1983,7 @@ sidebar: auto
   * Content-Type：返回数据类型。
   * Refresh：控制的定时刷新。
 
-#### 55. Token无感刷新
+## 55. Token无感刷新
 
 * 在响应拦截器中拦截，判断token过期后，调用刷新token接口。
 * 使用双Token进行无感刷新，access_token和refresh_token。
@@ -1993,12 +1993,12 @@ sidebar: auto
   * 若refresh_token过期，则清除所有token，返回登陆页面。
   * **（实现无感，用户请求必须保留。得到新token后必须重新请求。当同时出现多个请求时，可能会导致请求刷新多次token，需要设置标志判断是否正在请求刷新token且设置队列存储请求方法。）**
 
-#### 56. 大文件上传
+## 56. 大文件上传
 
 * 分片上传：把需要上传的文件按一定规则分成相同大小的数据块并给各个数据块定义唯一标识。按照一定规则将各个数据块上传。发送完成后，服务端判断上传的完整性。如果完整则合并成原始文件。
 * 断点续传：① 服务器端返回，告知在哪里开始。② 浏览器端自行处理。
 
-#### 57. H5C3
+## 57. H5C3
 
 * 语义化：编写HTML结构使用语义化标签，增强页面的可读性，利于维护，增强SEO。
 * 新特性：
@@ -2011,7 +2011,7 @@ sidebar: auto
   * 禁止移动端选择文字`-webkit-user-select:none`
   * 设置`overflow:scroll/auto`在IOS下滑动卡顿使用·`-webkit-overflow-scrolling:touch`
 
-#### 58. Vue杂题
+## 58. Vue杂题
 
 * **v-if和v-show区别：**
 
@@ -2079,7 +2079,7 @@ sidebar: auto
   * computed函数中必须有return，watch不用。
 
 
-#### 59. Vue2生命周期
+## 59. Vue2生命周期
 
 * 创建
   * beforeCreat：属性和方法都不能调用
@@ -2097,13 +2097,13 @@ sidebar: auto
   * activited：组件激活时
   * deactivited：组件销毁时
 
-#### 60. Vue3生命周期
+## 60. Vue3生命周期
 
 * 选项式API下，与Vue2基本一致。
 * 组合式API下，移除了beforeCreate和created，改变为setup。
 * 其他生命周期钩子前加on、destoryed和beforeDestory变为beforeUnmount金额onUnmounted。
 
-#### 61. Vue组件间通信
+## 61. Vue组件间通信
 
 * 父传子：
 
@@ -2166,7 +2166,7 @@ sidebar: auto
 
 * vuex/pinia
 
-#### 61. Axios封装
+## 61. Axios封装
 
 ```js
 import axios from 'axios'
@@ -2192,7 +2192,7 @@ $axios.interceptors.response.use(res => {
 export default $axios
 ```
 
-#### 62. VueRouter
+## 62. VueRouter
 
 * **Vue路由传参：**
 
@@ -2260,7 +2260,7 @@ export default $axios
     }
     ```
 
-#### 62. Vuex
+## 62. Vuex
 
 * 分为state、getters、mutations、actions、modules。
   * state：存储数据
@@ -2275,7 +2275,7 @@ export default $axios
 * vue中可以直接触发methods中的方法，vuex不行。vuex通过dispatch来访问actions中的方法，actions中的commit触发mutations中的方法，从而修改state的值，最后通过getter更新视图。
 * Vue.use(vuex)，调用install方法，通过applyMixin(vue)在任意组件内执行this.$store就可以访问到store对象。
 
-#### 63. diff算法和虚拟DOM
+## 63. diff算法和虚拟DOM
 
 * **虚拟DOM：**即JS对象，相当于真实DOM的抽象。
   * 代码初次运行，生命周期到create和beforeMount之间时，会编译template模板为render函数，render函数执行时调用h函数，h函数内部调用vnode生成虚拟DOM。
@@ -2291,18 +2291,18 @@ export default $axios
     * 若都不匹配，则查找key是否存在。若存在key可以直接找到节点原来所在位置。没有找到位置则新增节点，找到就移动节点位置。若没有key则不会去寻找位置，直接创建新节点，导致该节点下的所有节点都去新增，损耗性能。
   * diff算法即**patch->patchVnode->updateChildren->patchVnode->update Children->patchVnode...**循环的过程。
 
-#### 64. SPA
+## 64. SPA
 
 * 即单页应用，通过动态重写当前页面与用户进行交互，避免了页面直接切换打断用户体验。
 * 优点：① 具有良好的可移植性，即时性。② 用户体验好，不需要重新加载页面。③ 良好的前后端，分工明确。
 * 缺点：① 不利于搜索引擎抓取SEO。② 首次渲染速度过慢。
 
-#### 65. Vue2中data为什么是函数
+## 65. Vue2中data为什么是函数
 
 * 如果data是函数，**每复用一次组件，就会返回一份新的data**（类似于给每个组件实例创建一个私有数据空间，让各个组件实例维护各自的数据）
 * 如果组件中data是一个对象，则子组件中的data属性值会互相污染，产生副作用。（由于Object是引用数据类型，保存的是内存地址，故所有组件都会共用同一份data）所以必须用函数返回，利用函数的作用域，组件就可以维护各自的data。
 
-#### 66. 封装组件
+## 66. 封装组件
 
 * 步骤：
   * Vue.extend创建一个组件。
@@ -2314,7 +2314,7 @@ export default $axios
   * 尽量使组件原子化，一个组件只做一件事。
   * 容器组件管数据，展示组件管视图。
 
-#### 67. Vue强制刷新
+## 67. Vue强制刷新
 
 * location.reload()
 
@@ -2349,7 +2349,7 @@ export default $axios
 
 * inject/provide刷新页面相对于其他刷新方法，不会使页面白屏，增强用户交互感。
 
-#### 68. 性能优化
+## 68. 性能优化
 
 * 编码优化：
   * v-for绑定事件使用事件委托。
@@ -2373,7 +2373,7 @@ export default $axios
   * 客户端缓存、服务端缓存
   * 服务端GZIP压缩
 
-#### 69. 首屏优化
+## 69. 首屏优化
 
 * 路由懒加载
 * 非首屏的组件使用异步组件
@@ -2387,19 +2387,19 @@ export default $axios
 * 开启GZIP压缩
 * 图片懒加载
 
-#### 70. SEO优化
+## 70. SEO优化
 
 * 使用SSR服务端渲染，例如nuxt.js
 * 使用预渲染：prerender-spa-plugin
 
-#### 71. Webpack
+## 71. Webpack
 
 * webpack打包和不打包的区别：
   * 运行效率提升
   * webpack的语法转化，版本降级等。
 * webpack会将js、css、image看作一个模块，用import/require引入。找到入口文件找到关联的依赖文件，打包在一起。webpack将bundle文件拆分成多个小的文件，异步按需加载所需文件。
 
-#### 72. Git
+## 72. Git
 
 * git remote add origin 仓库地址
 * git pull 拉取、git push 上传、git status 查看状态
@@ -2412,7 +2412,7 @@ export default $axios
   * 两个分支修改了同一个文件的名称
     * 在本地当前分支上，修改冲突代码，add、commit、push
 
-#### 73. websocket
+## 73. websocket
 
 * 基于TCP的H5新协议、实现了浏览器和服务器全双工通信，是持久化协议。
 
@@ -2436,7 +2436,7 @@ export default $axios
     * WebSocket需要浏览器和服务器通过握手建立连接。
     * Http是浏览器向服务器发起的连接，服务器预先不知道这个连接。
 
-#### 74. Node.js
+## 74. Node.js
 
 * **一等函数：**一个函数可以被作为变量对待传递给另一个函数（回调）或者一个函数可以返回另一个函数（高阶函数）eg：map()、filter()
 * **Nodejs工作机制：**使用JS作为脚本语言运行在Chrome的V8引擎。基于事件驱动的架构，I/O异步运行，使其轻量且高效。
@@ -2445,7 +2445,7 @@ export default $axios
 * **非阻塞：**即一段代码，被安排到事件循环的下一次迭代中运行，从而解除了其余代码的阻塞，让他继续运行。
 * **Nodejs是多线程吗：**一个Nodejs进程在单线程中运行，可以使用`child_process`模块来并行运行多个进程，或者使用`Worker`来运行多个线程。
 
-#### 75. 组件透传
+## 75. 组件透传
 
 * 指传递给一个组件数据或方法，但该组件没有使用props或emits显式声明。例如`class、style、id`
 
@@ -2463,7 +2463,7 @@ export default $axios
   }
   ```
 
-#### 76. 父子组件生命周期
+## 76. 父子组件生命周期
 
 * **加载顺序：**
   * 父beforeCreate -> 父created -> 父beforeMounted -> 子beforeCreate -> 子created -> 子beforeMounted -> 子mounted -> 父mounted
@@ -2472,7 +2472,7 @@ export default $axios
   * 子组件更新：父beforeUpdate -> 子beforeUpdate -> 子updated -> 父updated
 * **销毁顺序：**父beforeDestory -> 子beforeDestory -> 子destoryed -> 父destoryed
 
-#### 77 .native和.sync
+## 77 .native和.sync
 
 * .native即在组件的根元素上监听一个原生事件。
 
@@ -2498,18 +2498,18 @@ export default $axios
     </script>
     ```
 
-#### 78. 进程和线程
+## 78. 进程和线程
 
 * 进程描述了CPU在运行指令及加载和保存上下文所需的时间，放在应用上来说即代表了一个程序。
 * 线程是进程中的更小单位，描述了执行一段指令所需时间。
 * **进程是资源分配的最小单位，线程是CPU调度的最小单位。**
 
-#### 79. 并行和并发
+## 79. 并行和并发
 
 * 并行：即同时发生两个并发事件，即多个处理器或者是多核的处理器同时处理多个不同的任务。
 * 并发：在同一个CPU上同时（不是真正的同时，CPU在多个和程序间切换）运行多个程序。即一个处理器同时处理多个任务。
 
-#### 80. 从输入url到页面完成加载发生了什么
+## 80. 从输入url到页面完成加载发生了什么
 
 * DNS解析：将域名解析成IP地址
   * 浏览器输入URL后，首先要经过域名解析，浏览器通过向DNS服务器发送域名，DNS查询到与域名对应的IP地址返回给浏览器。
