@@ -5,6 +5,7 @@ tags:
 - Interview
 categories:
 - others
+sidebar: auto
 ---
 
 ## 前端知识
