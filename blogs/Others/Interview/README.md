@@ -16,7 +16,7 @@ sidebar: auto
 * 解构赋值：`const a = {...obj, val1:1, val2:2}` 即扩展运算符...
 * class关键字：实现类、对象继承。super、constructor、extends等。
 * 模板字符串、函数参数默认值、Symbol基本数据类型
-* Map、和对象区别：key可以为任意值，对象key必须为string或symbol。`Map.set(key,value) Map.get(key)`  **map方法和`forEach`区别：**map方法返回一个新数组，对遍历数据执行函数可进行改变，forEach只是对每个数据进行遍历执行不会改变数据。 **`Array.form`**可以将Map转化为Array类型
+* Map、和对象区别：key可以为任意值，对象key必须为string或symbol。`Map.set(key,value) Map.get(key)`  **map方法和`forEach`区别：** map方法返回一个新数组，对遍历数据执行函数可进行改变，forEach只是对每个数据进行遍历执行不会改变数据。 **`Array.form`** 可以将Map转化为Array类型
 * 箭头函数`()=>{}`：this执行为上一层，而不是其调用者。
   * j箭头函数不能作为构造函数、没有arguments、且内部不具有this故不能使用call、bind、apply等方法。且不会有原型对象。
 
@@ -70,7 +70,7 @@ sidebar: auto
 * **JS类型：String、BigInt、Number、Symbol、Null、Undefined、Boolean**
 * `typeof`：返回字符串，表示类型。（string、null(object)、undefined、symbol、number、function、bigint、boolean）**对基本类型判断准确，无法精确判断引用数据类型（null和Array都会识别为object）**
 * `instanceof`：检测构造函数prototype是否出现在某个实例对象的原型链上。**对引用数据类型判断准确，无法对基本数据类型精确判断，限制数据必须是new出来的对象。**
-* **`constructor`：**每个函数定义都会生成一个constructor，基本类型会隐式装箱，创建构造函数实例。**可以对基本数据类型和引用数据类型精确判断，但无法识别null和undefined。**
+* **`constructor`：** 每个函数定义都会生成一个constructor，基本类型会隐式装箱，创建构造函数实例。**可以对基本数据类型和引用数据类型精确判断，但无法识别null和undefined。**
 * **`Object.prototype.toString.call()`**：可以对任何数据类型进行判断，生成结果为`[object type]` **（缺点是自身可能被修改）** 
   * 为什么使用object原型对象的tostring而不是对象自身原型的tostring：许多对象的tostring被改写，而object的tostring允许被修改，所以使用object来进行判断。
 
@@ -561,7 +561,7 @@ sidebar: auto
 * background-origin：图片起始位置（border-box、padding-box、content-box）只有在background-image设置为no-repeat时生效。
 * rotate旋转、scale变形
 * **盒子模型：** box-sizing：`content-box`（标准盒模型，宽度高度等于border+padding+content） `border-box`（怪异盒模型，宽度高度包含了padding、border，即会撑开盒子）
-* **flex布局：**flex简写属性->flex-grow、flex-shrink、flex-basics
+* **flex布局：** flex简写属性->flex-grow、flex-shrink、flex-basics
   * flex-grow：规定了在剩余容器空间内的分配的相对比例。
   * flex-shrink：规定flex元素的收缩规则
   * flex-basis：规定了flex元素在主轴方向的初始大小。
@@ -885,7 +885,7 @@ sidebar: auto
 
 ## 16. `Vue2`响应式原理
 
-* `vue2`实现响应式核心是**`Object.defineProperty`**方法.
+* `vue2`实现响应式核心是 **`Object.defineProperty`** 方法.
 
 * 通过内部get，set的监听来进行**数据劫持，结合发布订阅模式，**在数据发生改变的时候，发送消息给订阅者，触发对应的监听回调渲染视图，即数据和视图同步变化。
 
@@ -1131,7 +1131,7 @@ sidebar: auto
   }
   ```
 
-* **总结：**vue2响应式本质是observer进行观察转化变量为响应式，通过watcher类中介进行依赖获取，dep类进行更新。
+* **总结：** vue2响应式本质是observer进行观察转化变量为响应式，通过watcher类中介进行依赖获取，dep类进行更新。
 
   ```js
   class Observer {
@@ -1286,15 +1286,15 @@ sidebar: auto
 
 ## 19. 杂题
 
-* **盒子快速居中：**父盒子display(flex)，子盒子`margin：auto`
+* **盒子快速居中：** 父盒子display(flex)，子盒子`margin：auto`
 
 * **padding和margin区别**： **作用对象不同**，padding作用于自身，margin作用于外部对象。
 
-* **`vw`**和百分比区别：百分比有继承关系，`vw`仅相对于视口宽度。
+* **`vw`** 和百分比区别：百分比有继承关系，`vw`仅相对于视口宽度。
 
 * **浏览器支持小字体：**`transform：scale`进行缩放
 
-* **深浅拷贝：**浅拷贝修改新数据会影响源数据（直接赋值、解构赋值：解构赋值一层相当于深拷贝、深层相当于浅拷贝）
+* **深浅拷贝：** 浅拷贝修改新数据会影响源数据（直接赋值、解构赋值：解构赋值一层相当于深拷贝、深层相当于浅拷贝）
 
   * 深拷贝：`JSON.parse(JSON.stringify(list))` 转化**函数**时有问题。
 
@@ -1326,11 +1326,6 @@ sidebar: auto
   * transfrom：scale(0)
   * clip：rect(0,0,0,0)（将元素裁剪到0，使其不可见，但仍然存在）
   
-* 数组去重：
-
-  * 
-
-
 ## 20. 前端性能优化
 
 * 加载：
@@ -1686,9 +1681,9 @@ sidebar: auto
 
 * 即Cross Site Script 跨站脚本攻击。
 * 分为DOM攻击、反射攻击、存储攻击
-  * **DOM攻击：**用户在客户端输入的数据包含恶意脚本，且未做相应过滤处理。攻击者寻找代码中可以操作的元素(document.write、innerHTML)进行相应变化，
-  * **反射攻击：**攻击者发送被攻击者链接，被攻击者访问链接会向攻击者的目标服务器发起请求，返回相应的script代码，并在浏览器执行造成用户被攻击。
-  * **存储攻击：**持久性攻击方式，攻击的代码会提交到服务器的数据中保存。例如评论系统存入攻击者的js脚本代码，在用户进行访问后即会被执行。
+  * **DOM攻击：** 用户在客户端输入的数据包含恶意脚本，且未做相应过滤处理。攻击者寻找代码中可以操作的元素(document.write、innerHTML)进行相应变化，
+  * **反射攻击：** 攻击者发送被攻击者链接，被攻击者访问链接会向攻击者的目标服务器发起请求，返回相应的script代码，并在浏览器执行造成用户被攻击。
+  * **存储攻击：** 持久性攻击方式，攻击的代码会提交到服务器的数据中保存。例如评论系统存入攻击者的js脚本代码，在用户进行访问后即会被执行。
 * 预防方法：
   * 对输入源进行安全编码。
   * 改为纯前端渲染，将代码和数据分开。
@@ -1847,7 +1842,6 @@ sidebar: auto
 * 高度塌陷和上边距重叠：
 * 外边距塌陷：仅发生在垂直方向。块级元素不会发生外边距塌陷。
   * 外边距计算：正数和正数情况取最大的值，负数和负数取绝对值最大的值。
-* 
 
 ## 48. Ajax
 
@@ -1934,7 +1928,6 @@ sidebar: auto
 * 进行重绘：根据计算好的信息绘制页面。
 
 * JS的加载可能会引起阻塞页面渲染，在尚未构建好CSSOM时JS不能执行。
-
   ![image-20230412095107622](C:\Users\LWH\AppData\Roaming\Typora\typora-user-images\image-20230412095107622.png)
 
 ## 50. DOM树和渲染树区别
@@ -2112,7 +2105,7 @@ sidebar: auto
 
 * 子传父：
 
-  * $emit：子组件绑定自定义事件，通过事件执行向父组件传值，父组件进行事件监听。 vue2：`this.$emit('事件名', 值)` vue3：`const emit = defineEmits(['事件名'])`
+  * `$emit`：子组件绑定自定义事件，通过事件执行向父组件传值，父组件进行事件监听。 vue2：`this.$emit('事件名', 值)` vue3：`const emit = defineEmits(['事件名'])`
 
 * 兄弟传：利用`VueComponent.prototype.__proto__ === Vue.prototype`
 
@@ -2129,7 +2122,7 @@ sidebar: auto
     })
     ```
 
-  * 子组件绑定事件和触发时机：$on和$emit
+  * 子组件绑定事件和触发时机：`$on`和`$emit`
 
     ```vue
     <script>
@@ -2277,11 +2270,11 @@ export default $axios
 
 ## 63. diff算法和虚拟DOM
 
-* **虚拟DOM：**即JS对象，相当于真实DOM的抽象。
+* **虚拟DOM：** 即JS对象，相当于真实DOM的抽象。
   * 代码初次运行，生命周期到create和beforeMount之间时，会编译template模板为render函数，render函数执行时调用h函数，h函数内部调用vnode生成虚拟DOM。
   * 当数据再次发生变化时，会重新执行render函数，生成新虚拟DOM，新旧虚拟DOM对比，修改真实DOM结构。
-  * **作用：**虚拟DOM提供了跟踪当前DOM状态的途径，它会根据当前数据生成一个描述当前DOM结构的虚拟DOM，数据变化时又会去生成一个新的虚拟DOM，前后生成的两个虚拟DOM保存了变化前后的状态，再根据diff算法计算出前后的差异，得出更新的最优解。
-* **diff算法：**即比较新旧虚拟DOM之间的对比算法。
+  * **作用：** 虚拟DOM提供了跟踪当前DOM状态的途径，它会根据当前数据生成一个描述当前DOM结构的虚拟DOM，数据变化时又会去生成一个新的虚拟DOM，前后生成的两个虚拟DOM保存了变化前后的状态，再根据diff算法计算出前后的差异，得出更新的最优解。
+* **diff算法：** 即比较新旧虚拟DOM之间的对比算法。
   * diff算法对比只会在同层级间进行比较，不会跨层级比较。内部使用patch函数进行不同处的存储，根据存储信息进行更新真实DOM。diff算法采取先序深度优先遍历进行节点比较。
   * **步骤：**
     * 比较新旧DOM树，对根节点执行patch(oldVnode, newVnode)函数，若不同则直接替换。（patch函数相当于diff算法的入口）
@@ -2289,7 +2282,7 @@ export default $axios
     * 比较子节点，分别有两对指针oldStart、oldEnd、newStart、newEnd。如果oldStart === newStart、oldStart === newEnd， oldEnd === newStart、oldEnd === newEnd中有任何一种匹配，就会执行patchVnode进一步比较。
     * 当oldStart>oldEnd或newStart>newEnd则表示匹配结束。多余元素删除，新增元素新增。
     * 若都不匹配，则查找key是否存在。若存在key可以直接找到节点原来所在位置。没有找到位置则新增节点，找到就移动节点位置。若没有key则不会去寻找位置，直接创建新节点，导致该节点下的所有节点都去新增，损耗性能。
-  * diff算法即**patch->patchVnode->updateChildren->patchVnode->update Children->patchVnode...**循环的过程。
+  * diff算法即 **patch->patchVnode->updateChildren->patchVnode->update Children->patchVnode...** 循环的过程。
 
 ## 64. SPA
 
@@ -2438,22 +2431,22 @@ export default $axios
 
 ## 74. Node.js
 
-* **一等函数：**一个函数可以被作为变量对待传递给另一个函数（回调）或者一个函数可以返回另一个函数（高阶函数）eg：map()、filter()
-* **Nodejs工作机制：**使用JS作为脚本语言运行在Chrome的V8引擎。基于事件驱动的架构，I/O异步运行，使其轻量且高效。
-* **Nodejs如何克服I/O阻塞的问题：**Nodejs拥有事件循环机制，应用于异步处理所有I/O操作，而不会去阻塞main函数。如果有多个IO调用，则每个调用都会相应的排队，分别执行。
-* **Nodejs中的事件循环：**事件循环使用队列和侦听器进行管理。当需要执行异步函数（或I/O）时，主线程将其发送到不同的线程，从而允许V8继续执行主代码。
-* **非阻塞：**即一段代码，被安排到事件循环的下一次迭代中运行，从而解除了其余代码的阻塞，让他继续运行。
-* **Nodejs是多线程吗：**一个Nodejs进程在单线程中运行，可以使用`child_process`模块来并行运行多个进程，或者使用`Worker`来运行多个线程。
+* **一等函数：** 一个函数可以被作为变量对待传递给另一个函数（回调）或者一个函数可以返回另一个函数（高阶函数）eg：map()、filter()
+* **Nodejs工作机制：** 使用JS作为脚本语言运行在Chrome的V8引擎。基于事件驱动的架构，I/O异步运行，使其轻量且高效。
+* **Nodejs如何克服I/O阻塞的问题：** Nodejs拥有事件循环机制，应用于异步处理所有I/O操作，而不会去阻塞main函数。如果有多个IO调用，则每个调用都会相应的排队，分别执行。
+* **Nodejs中的事件循环：** 事件循环使用队列和侦听器进行管理。当需要执行异步函数（或I/O）时，主线程将其发送到不同的线程，从而允许V8继续执行主代码。
+* **非阻塞：** 即一段代码，被安排到事件循环的下一次迭代中运行，从而解除了其余代码的阻塞，让他继续运行。
+* **Nodejs是多线程吗：** 一个Nodejs进程在单线程中运行，可以使用`child_process`模块来并行运行多个进程，或者使用`Worker`来运行多个线程。
 
 ## 75. 组件透传
 
 * 指传递给一个组件数据或方法，但该组件没有使用props或emits显式声明。例如`class、style、id`
 
-* 组件透传为子组件提供了不需要显式声明属性或方法的条件，即只需要声明其默认参数，对其他参数或方法使用`v-bind:$attrs`和`v-on:$listeners`传入，并在子组件使用**inheritAttrs：false**声明（即禁止属性继承）。
+* 组件透传为子组件提供了不需要显式声明属性或方法的条件，即只需要声明其默认参数，对其他参数或方法使用`v-bind:$attrs`和`v-on:$listeners`传入，并在子组件使用 **inheritAttrs：false** 声明（即禁止属性继承）。
 
-* 在vue3中若使用setup语法糖，可以通过**useAttrs()**访问透传的属性。
+* 在vue3中若使用setup语法糖，可以通过 **useAttrs()** 访问透传的属性。
 
-* 若不使用setup语法糖，则在setup函数内部接收attrs参数**（ctx上下文包含了attrs、slots、emit、expose等属性）**
+* 若不使用setup语法糖，则在setup函数内部接收attrs参数 **（ctx上下文包含了attrs、slots、emit、expose等属性）**
 
   ```js
   export default {
@@ -2511,21 +2504,21 @@ export default $axios
 
 ## 80. 从输入url到页面完成加载发生了什么
 
-* DNS解析：将域名解析成IP地址
+* **DNS解析：将域名解析成IP地址**
   * 浏览器输入URL后，首先要经过域名解析，浏览器通过向DNS服务器发送域名，DNS查询到与域名对应的IP地址返回给浏览器。
-* TCP连接：TCP三次握手
+* **TCP连接：TCP三次握手**
   * 在客户端发送数据前，会发起TCP三次握手用于同步客户端和服务端的序列号和确认号。
   * ① 客户端发起请求建立连接。② 服务端收到请求发送已收到的应答。 ③ 客户端收到服务端的应答再次发送请求至服务端表示成功建立连接。
   * 三次握手的原因：假设不采用三次握手，如果客户端第一次发送建立连接的请求因为某些原因滞留，客户端超时会再次发送建立连接的请求，这时两次请求都会到达服务端，服务端就会多建立一次请求，浪费资源。所以必须是三次握手，客户端需要多进行一次服务端收到请求的确认。
-* 发送HTTP请求
+* **发送HTTP请求**
   * TCP三次握手后，开始发送HTTP请求报文至服务器。
-* 服务器处理请求并返回HTTP报文
-* 浏览器解析渲染页面
+* **服务器处理请求并返回HTTP报文**
+* **浏览器解析渲染页面**
   * 根据HTML文件解析出DOM Tree
   * 根据CSS文件解析出CSSOM Tree
   * 将DOM Tree 和 CSSOM Tree和并，构建Render树。
   * 根据Render Tree进行节点信息计算，即重排（回流）
   * 根据计算好的信息进行页面绘制，即重绘。
-* 连接结束：TCP四次挥手
+* **连接结束：TCP四次挥手**
   * 数据传输完毕，断开TCP连接，即四次挥手。
   * ① 客户端向服务端发报文，表示没有数据可以传输。② 服务端向客户端发送报文，表示同意关闭请求。③ 服务端向客户端发报文，请求关闭连接。④ 客户端向服务端发送报文表示接收完服务端的响应报文，进行关闭。
