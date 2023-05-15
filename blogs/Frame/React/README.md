@@ -368,6 +368,11 @@ class Counter extends React.Component {
     * 使用constructor进行this的绑定修改。
     ```JSX
     class Counter extends React.Component {
+      constructor() {
+        super()
+        this.changeCount = this.changeCount.bind(this)
+      }
+      
       state = {
         count: 0
       }
@@ -381,5 +386,149 @@ class Counter extends React.Component {
     ```
     * onClick内部使用箭头函数修改
     ```JSX
-    
+    class Counter extends React.Component {
+      state = {
+        count: 0
+      }
+
+      changeCount() {
+        this.setState({
+          count: this.state.count + 1
+        })
+      }
+
+      render() {
+        return (
+          <button onClick={()=>this.setState()}>{this.state.count}</button>
+        )
+      }
+    }
     ```
+
+### React状态不可变
+> **不要直接去修改状态的值，而是基于当前状态创建新的状态值。**
+
+* 错误的直接修改：
+```JSX
+state = {
+  count : 0,
+  list: [1,2,3],
+  person: {
+     name:'jack',
+     age:18
+  }
+}
+// 直接修改简单类型Number
+this.state.count++
+++this.state.count
+this.state.count += 1
+this.state.count = 1
+
+// 直接修改数组
+this.state.list.push(123)
+this.state.list.spice(1,1)
+
+// 直接修改对象
+this.state.person.name = 'rose'
+```
+
+* 基于当前状态创建新值：
+```JSX
+this.setState({
+  count: this.state.count + 1,
+  list: [...this.state.list, 4],
+  person: {
+    ...this.state.person,
+    name: 'Rose'
+  }
+})
+```
+
+## 表单处理
+### 受控表单组件
+:::tip
+受控组件即 **可以被react状态控制的组件** <br/>
+React组件状态存放处在state中，input表单元素自身状态在value中，React将state与表单元素的值（value）绑定在一起，由state的值来控制表单元素的值，从而保证数据单一性。
+:::
+* 实现步骤
+  1. 在组件的state中声明组件的状态和数据。
+  2. 将状态数据设置为input标签元素的value属性的值。
+  3. 为input添加change事件，事件处理程序中，通过e.target获取到当前文本框值。
+  4. 调用setState方法，将文本框值设置为state状态的值。
+* 即Vue中v-model实现的逻辑。
+```JSX
+import React from 'react'
+class Counter extends React.Component {
+  state = {
+    count: 'loading...'
+  }
+
+  changeCount = (e) => {
+    this.setState({
+      count: e.target.value
+    })
+  }
+
+  render() {
+    return (
+      <>
+        <input type="text" onChange={this.changeCount} value={this.state.count} />
+        {this.state.count}
+      </>
+    )
+  }
+}
+
+function App() {
+  return (
+    <div className="App">
+      <Counter />
+    </div>
+  )
+}
+
+export default App
+```
+
+### 非受控表单组件
+> 非受控组件即通过手动操作DOM方式获取文本框的值，文本框的状态不受react组件的state中的状态控制，直接通过原生DOM获取输入的值。
+
+* 实现步骤
+  1. 导入`createRef`函数。
+  2. 调用createRef函数，创建一个ref对象，存储到名为msgRef的实例属性中。
+  3. 为input添加ref属性，值为msgRef。
+  4. 在按钮的事件处理程序中，通过`msgRef.current`即可拿到input对应的DOM元素，而其中`msgRef.current.value`拿到的是文本框的值。
+  
+```JSX
+import React, { createRef } from "react";
+
+class Counter extends React.Component {
+  msgRef = createRef()
+  
+  logMsg = () => {
+    console.log(this.msgRef.current.value);
+  }
+
+  render() {
+    return (
+      <>
+        <input type="text" ref={this.msgRef} />
+        <button onClick={this.logMsg}>click</button>
+      </>
+    )
+  }
+}
+
+function App() {
+  return (
+    <div className="App">
+      <Counter/>
+    </div>
+  )
+}
+
+export default App
+```
+
+
+## React组件间通信
