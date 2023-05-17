@@ -739,21 +739,21 @@ export default App
 > **利用Context来实现跨层级组件传值，无需为每层组件手动添加props，即可机械能传递。**
 **实现步骤：**
   1. 创建Context对象，导出Provider和Consumer对象。
-    ```JSX
-    const { Provider, Consumer } = createContext()
-    ```
+  ```JSX
+      const { Provider, Consumer } = createContext()
+  ```
   2. 使用Provider包裹上层组件提供数据。
-    ```JSX
+  ```JSX
     <Provider value={this.state.message}>
       {/** 根组件 */}
     </Provider>
-    ```
+  ```
   3. 需要用到数据的组件使用Consumer包裹获取数据。
-    ```JSX
+  ```JSX
     <Consumer>
       {value => /* 基于context进行渲染 */}
     </Consumer>
-    ```
+  ```
 
 **注意：**
    * 上层组件和下层组件的关系是相对的，只要存在就可以使用。
@@ -804,3 +804,139 @@ class App extends React.Component {
 
 export default App
 ```
+
+## React组件进阶
+### children属性
+> **children表示该组件的子节点，只要组件内部有子节点，则props就具有children属性。**
+
+children使用方式类似于Vue中的插槽。若并列传递，则接收时children为数组。
+
+**类型：** 
+  1. 普通文本
+  2. 普通标签元素
+  3. 函数 / 对象
+  4. JSX
+
+```JSX
+import React from 'react'
+
+function A({ children }) {
+  return (
+    <>
+      {children}<br />
+      <span>hello</span>
+    </>
+  )
+}
+
+class App extends React.Component {
+  render() {
+    return (
+      <div className='App'>
+        <A>
+          this is a A
+        </A>
+      </div>
+    )
+  }
+}
+
+export default App
+```
+
+### props检验
+> **利用prop-types包对传入props值进行类型校验。**
+类似于vue中的defineProps中进行类型的校验。
+
+**实现步骤：**
+  1. 安装属性校验包：`npm i prop-types`。
+  2. 导入`prop-types`包。
+  3. 使用`组件名.propTypes = {}`给组件添加校验规则。
+
+**核心代码：**
+```JSX
+import PropTypes from 'prop-types'
+
+const List = props => {
+  const arr = props.colors
+  const lis = arr.map((item, index) => <li key={index}>{item.name}</li>)
+  return <ul>{lis}</ul>
+}
+
+List.propTypes = {
+  colors: PropTypes.array
+}
+```
+
+### props检验-规则说明
+**四种常见结构**
+  1. 常见类型：array、bool、func、number、object、string
+  2. React元素类型：element
+  3. 必填项：isRequired
+  4. 特定的结构对象：shape({})
+
+**核心代码**
+```JS
+// 常见类型
+optionalFunc: PropTypes.func,
+// 必填 只需要在类型后面串联一个isRequired
+requiredFunc: PropTypes.func.isRequired,
+// 特定结构的对象
+optionalObjectWithShape: PropTypes.shape({
+	color: PropTypes.string,
+	fontSize: PropTypes.number
+})
+```
+
+### props校验-默认值
+> **通过`defaultProps`可以对组建的props设置默认值，在未传入props时生效。**
+> 
+#### 函数组件
+**直接使用函数参数默认值**
+```JSX
+function List({pageSize = 10}) {
+  return (
+    <div>
+      此处展示props的默认值：{ pageSize }
+    </div>
+  )
+}
+```
+
+**使用`组件.defineProps`属性**
+```JSX
+function List({pageSize}) {
+  return (
+    <div>
+      此处展示props的默认值：{ pageSize }
+    </div>
+  )
+}
+List.defineProps = {
+  pageSize: 10
+}
+```
+
+#### 类组件
+> **使用类静态属性声明默认值，`static defaultProps = {}`**
+```JSX
+class List extends Component {
+  static defaultProps = {
+    pageSize: 10
+  }
+  render() {
+    return (
+      <div>
+        此处展示props的默认值：{this.props.pageSize}
+      </div>
+    )
+  }
+}
+<List />
+```
+
+## 生命周期
+
+## Hooks基础
+
+## Hooks进阶
