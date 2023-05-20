@@ -936,7 +936,76 @@ class List extends Component {
 ```
 
 ## 生命周期
+:::tip
+**组建的生命周期是指组件从被创建到挂载到页面中运行起来，再到组件不用时卸载的过程。**<br/>
+**注意：只有类组件才有生命周期！**
+:::
+![生命周期](https://cdn.nlark.com/yuque/0/2022/png/274425/1654490712545-6bd28fa7-290b-48fb-8d51-bbf5578dad3f.png)
+
+### 生命周期 - 挂载阶段
+![挂载阶段](https://cdn.nlark.com/yuque/0/2022/png/274425/1654490729034-d2d80cce-7fab-4dd8-bcbc-29e33bdffb63.png)
+
+#### constructor
+**触发时机**
+* 创建组件时最先执行，初始化的时候只执行一次。
+
+**作用**
+1. 初始化state
+2. 创建Ref
+3. 使用bind解决this指向等
+
+#### render
+**触发时机**
+* 每次组件渲染时触发。
+
+**作用**
+* 渲染UI结构，此中不能调用`setState`会造成页面重新绘制而造成死循环。
+
+#### componentDidMount
+**触发时机**
+* 组件挂载时（完成DOM渲染后）执行，初始化时执行一次。
+* 类似于Vue中的`Mounted`
+
+**作用**
+1. 发送网络请求
+2. DOM操作
+
+### 生命周期 - 更新阶段
+![更新阶段](https://cdn.nlark.com/yuque/0/2022/png/274425/1654490742583-b933202d-3de7-41ae-b9ba-75ae1d2af34c.png)
+
+#### render
+**触发时机**
+* 每次组件渲染时都会触发。
+
+**作用**
+* 渲染UI（与挂载阶段的render是同一个render）
+
+#### componentDidUpdate
+**触发时机**
+*  组件更新后触发（DOM渲染完毕）
+
+**作用**
+* 进行DOM操作，可以直接获取到更新后的DOM。
+* 不能在此调用`setState`函数，会一直更新下去。
+* 类似于Vue的Updated。
+
+### 生命周期 - 卸载阶段
+#### componentWillUnmount
+**触发时机**
+* 组件卸载（从页面消失）
+
+**作用**
+* 执行清理工作（清除定时器）
+
+**如果组件中的数据会影响视图，则定义在`state`中，若不影响即可直接定义。（例如定时器参数）**
 
 ## Hooks基础
 
 ## Hooks进阶
+
+# React Router
+
+# Mobox
+
+# Redux
+
