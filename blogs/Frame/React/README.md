@@ -547,7 +547,7 @@ export default App
     * 类组件使用 **this.props** 获取props对象。
     * 函数式组件直接通过 **props** 参数获取props对象。
 
-![](https://cdn.nlark.com/yuque/0/2022/png/274425/1654490432739-ea283505-3ddd-4403-9fba-7735b04b451e.png)
+![](/blog/img_react/props-1.png)
 
 **代码实现：**
 ```JSX
@@ -940,10 +940,10 @@ class List extends Component {
 **组建的生命周期是指组件从被创建到挂载到页面中运行起来，再到组件不用时卸载的过程。**<br/>
 **注意：只有类组件才有生命周期！**
 :::
-![生命周期](https://cdn.nlark.com/yuque/0/2022/png/274425/1654490712545-6bd28fa7-290b-48fb-8d51-bbf5578dad3f.png)
+![生命周期](/blog/img_react/life.png)
 
 ### 生命周期 - 挂载阶段
-![挂载阶段](https://cdn.nlark.com/yuque/0/2022/png/274425/1654490729034-d2d80cce-7fab-4dd8-bcbc-29e33bdffb63.png)
+![挂载阶段](/blog/img_react/life1.png)
 
 #### constructor
 **触发时机**
@@ -971,7 +971,7 @@ class List extends Component {
 2. DOM操作
 
 ### 生命周期 - 更新阶段
-![更新阶段](https://cdn.nlark.com/yuque/0/2022/png/274425/1654490742583-b933202d-3de7-41ae-b9ba-75ae1d2af34c.png)
+![更新阶段](/blog/img_react/life2.png)
 
 #### render
 **触发时机**
