@@ -1001,7 +1001,316 @@ class List extends Component {
 
 ## Hooks基础
 
+### Hooks概念
+#### 1. 什么是Hooks
+> **Hooks的本质：一套能够使函数组件更加强大，更加灵活的钩子。**
+React体系内组件分为 **类组件** 和 **函数组件。** <br/>
+函数组件是一个更加匹配React的设计理念 `UI = f(data)`，也更有利于逻辑拆分与重用的组件表达形式，而先前的函数组件是不可以有自己的状态的，为了能让函数组件可以拥有自己的状态，所以从react v16.8开始，Hooks应运而生。
+
+**注意点：**
+1. 有了hooks之后，为了兼容老版本，class类组件并没有被移除，俩者都可以使用
+2. 有了hooks之后，不能在把函数成为无状态组件了，因为 **hooks为函数组件提供了状态**
+3. **hooks只能在函数组件中使用**
+
+#### 2. Hooks解决的问题
+> Hooks的出现解决了两个问题：**1. 组件的逻辑状态复用。 2. 类组件本身的问题。**
+1. 组件的逻辑复用
+   在hooks出现之前，react先后尝试了 mixins混入，HOC高阶组件，render-props等模式
+   但是都有各自的问题，比如mixin的数据来源不清晰，高阶组件的嵌套问题等等。
+2. 类组件自身的问题
+   class组件就像一个厚重的‘战舰’ 一样，大而全，提供了很多东西，有不可忽视的学习成本，比如各种生命周期，this指向问题等等，而我们更多时候需要的是一个轻快灵活的'快艇' 
+
+
+### useState
+> **useState为函数组件提供状态。**
+#### 1.基础使用
+**使用步骤**
+1. 导入`useState`函数。
+2. 调用`useState`函数，并传入状态的初始值。
+3. 从`useState`函数的返回值中，拿到状态和修改状态的方法。
+4. 在JSX中展示状态。
+5. 调用下修改状态的方法更新状态。
+
+**代码实现**
+```JSX
+import { useState } from 'react'
+
+function App() {
+  // 参数：状态初始值比如,传入 0 表示该状态的初始值为 0
+  // 返回值：数组,包含两个值：1 状态值（state） 2 修改该状态的函数（setState）
+  const [count, setCount] = useState(0)
+  return (
+    <button onClick={() => { setCount(count + 1) }}>{count}</button>
+  )
+}
+export default App
+```
+
+#### 2.状态的的读取和修改
+**读取状态**
+> **该方式提供的状态，是函数内部的局部变量，故可在函数内部的任意位置使用。**
+
+**修改状态**
+1. setCount是一个函数，参数表示最新的 **状态值**
+2. 调用该函数后，将使用新值替换旧值。
+3. 修改状态后，由于状态发生了变化，会引起视图变化。
+
+**注意事项**
+* 修改状态时，一定要使用新的的状态替换旧的状态，不能直接去修改修的状态，**尤其是引用类型！**
+
+#### 3.组件的更新过程
+* 组件第一次渲染
+  1. 从头开始执行代码逻辑,传入参数作为状态初始值.
+  2. 调用`useState(0)`将传入的阐述作为状态初始值,即0.
+  3. 渲染组件.此时获取到的状态count值为0.
+
+* 组件第二次渲染
+  1. 点击按钮,调用`setCount(count+1)`修改状态,由于状态改变,则组件会重新渲染.
+  2. 重新渲染,会再次执行代码逻辑.
+  3. 再次调用`useState(0)`,此时React内部会拿到最新的状态值而非初始值.
+  4. 在此渲染组件,此时获取的状态count值为1.
+
+**注意:**
+* **useState 的初始值(参数)只会在组件第一次渲染时生效.** 也就是说，以后的每次渲染，useState 获取到都是最新的状态值，React 组件会记住每次最新的状态值
+
+```JSX
+import { useState } from 'react'
+
+function App() {
+  const [count, setCount] = useState(0)
+  // 在这里可以进行打印测试
+  console.log(count)
+  return (
+    <button onClick={() => { setCount(count + 1) }}>{count}</button>
+  )
+}
+export default App
+```
+
+#### 4.使用规则
+1. `useState`函数可以执行多次,且每次执行互相独立,每调用一次为函数组件提供一个状态.
+```JSX
+function List(){
+  // 以字符串为初始值
+  const [name, setName] = useState('cp')
+  // 以数组为初始值
+  const [list,setList] = useState([])
+}
+```
+
+2. `useState`注意事项
+  * 只能在函数组件或其他hook函数中使用.
+  * 不能嵌套在`if`/`for`其他函数中(react按照hooks的调用顺序识别每一个hook)
+```JSX
+let num = 1
+function List(){
+  num++
+  if(num / 2 === 0){
+     const [name, setName] = useState('cp') 
+  }
+  const [list,setList] = useState([])
+}
+// 俩个hook的顺序不是固定的，这是不可以的！！！
+```
+
+### useEffect
+**什么是副作用** <br/>
+> 副作用是相对于主作用来说的，一个函数除了主作用，其他的作用就是副作用。对于 React 组件来说，**主作用就是根据数据（state/props）渲染 UI，除此之外都是副作用（比如，手动修改 DOM）**
+
+**常见的副作用** <br/>
+1. 数据请求ajax发送
+2. 手动修改DOM
+3. localStorage操作
+
+**`useEffect`函数的作用就是为React函数组件提供副作用处理的.**
+
+#### 1.基础使用
+**作用**
+> 为React函数组件提供副作用处理.
+
+**使用步骤**
+  1. 导入`useEffect`函数
+  2. 调用`useEffect`函数,并传入回调函数.
+  3. 在回调函数中编写副作用处理(dom操作)
+  4. 修改数据状态
+  5. 检测副作用是否生效
+
+**代码实现**
+```JSX
+import { useEffect, useState } from 'react'
+
+function App() {
+  const [count, setCount] = useState(0)
+ 
+  useEffect(()=>{
+    // dom操作
+    document.title = `当前已点击了${count}次`
+  })
+  return (
+    <button onClick={() => { setCount(count + 1) }}>{count}</button>
+  )
+}
+
+export default App
+```
+
+#### 2.依赖项控制执行时机
+1. 不添加依赖项
+> **组件首次渲染执行一次，以及不管是哪个状态更改引起组件更新时都会重新执行**<br/>
+> 1. 组件初始化渲染
+> 2. 组件更新
+
+```JSX
+useEffect(()=>{
+    console.log('副作用执行了')
+})
+```
+
+2. 添加空数组
+> 组件只在首次渲染时执行一次.
+```JSX
+useEffect(()=>{
+	 console.log('副作用执行了')
+},[])
+```
+
+3. 添加依赖项
+> **副作用函数在首次渲染时执行,在依赖项发送变化时重新执行.**
+```JSX
+function App() {  
+    const [count, setCount] = useState(0)  
+    const [name, setName] = useState('zs') 
+    
+    useEffect(() => {    
+        console.log('副作用执行了')  
+    }, [count])  
+    
+    return (    
+        <>      
+         <button onClick={() => { setCount(count + 1) }}>{count}</button>      
+         <button onClick={() => { setName('cp') }}>{name}</button>    
+        </>  
+    )
+}
+```
+
+**注意事项**
+* useEffect 回调函数中用到的数据（比如，count）就是依赖数据，就应该出现在依赖项数组中，如果不添加依赖项就会有bug出现
+
+#### 3.清理副作用
+> 如果想要清理副作用 可以在副作用函数中的末尾return一个新的函数，在新的函数中编写清理副作用的逻辑<br/>
+> 注意执行时机为：
+> 1. 组件卸载时自动执行
+> 2. 组件更新时,下一个useEffect副作用函数执行前自动执行.
+```JSX
+import { useEffect, useState } from "react"
+
+
+const App = () => {
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      setCount(count + 1)
+    }, 1000)
+    return () => {
+      // 用来清理副作用的事情
+      clearInterval(timerId)
+    }
+  }, [count])
+  return (
+    <div>
+      {count}
+    </div>
+  )
+}
+
+export default App
+```
+
 ## Hooks进阶
+### useState - 回调函数的参数
+**使用场景**
+参数只会在组件的初始渲染中起作用，后续渲染时会被忽略。如果初始 state 需要通过计算才能获得，则可以传入一个函数，在函数中计算并返回初始的 state，此函数只在初始渲染时被调用.
+<br/>
+类似于vue的computed.
+
+**语法**
+```JSX
+const [data, setData] = useState(() => {
+  // 编写计算逻辑, return计算之后的初始值
+})
+```
+
+**语法规则**
+1. 回调函数return出去的值将作为`data`的初始值.
+2. 回调函数中的逻辑只会在组件初始化时执行一次.
+
+**语法选择**
+1. 如果就是初始化一个普通的数据 直接使用`useState(普通数据)`即可.
+2. 如果要初始化的数据无法直接得到需要通过计算才能获取到，使用`useState(()=>{})`.
+
+**代码示例**
+```JSX
+import { useState } from 'react'
+
+
+function Names({ firstName, secondName }) {
+  const [name, setName] = useState(() => {
+    return firstName + secondName
+  })
+  return (
+    <>
+      <span>{name}</span>
+      <button onClick={() => setName('error')}>click</button>
+      <br />
+    </>
+  )
+}
+
+function App() {
+  return (
+    <div className="App" style={{ height: '1200px' }}>
+      <Names firstName={'L'} secondName={'WH'} />
+      <Names firstName={'Admin'} secondName={'Root'} />
+    </div>
+  )
+}
+
+export default App
+```
+
+
+
+### useEffect - 发送网络请求
+**使用场景**
+* 在`useEffect`中发送网络请求,封装同步`async await`操作.
+
+**语法要求**
+* 不可以直接在`useEffect`的回调函数外层直接包裹`await` ，因为**异步会导致清理函数无法立即返回**
+```JSX
+useEffect(async ()=>{    
+    const res = await axios.get('http://geek.itheima.net/v1_0/channels')   
+    console.log(res)
+},[])
+```
+
+**正确写法**
+```JSX
+useEffect(()=>{   
+    async function fetchData(){      
+       const res = await axios.get('http://geek.itheima.net/v1_0/channels')                            console.log(res)   
+    } 
+},[])
+```
+
+
+### useRef
+
+
+
+### useContext
+
+
 
 # React Router
 
