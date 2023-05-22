@@ -1124,6 +1124,8 @@ function List(){
 
 **`useEffect`函数的作用就是为React函数组件提供副作用处理的.**
 
+**`useEffect`总会在DOM更新后执行.**
+
 #### 1.基础使用
 **作用**
 > 为React函数组件提供副作用处理.
@@ -1305,16 +1307,392 @@ useEffect(()=>{
 
 
 ### useRef
+**使用场景**
+* 在函数组件中获取真实的DOM元素对象或者是组件对象.
 
+**使用步骤**
+1. 导入`useRef`函数.
+2. 执行`useRef`函数并传入null,返回值为一个对象,内部有`current`属性来存放拿到的DOM对象(组件实例).
+3. 通过ref绑定要获取的元素或者组件.
 
+**获取DOM**
+```JSX
+import { useEffect, useRef } from 'react'
+function App() {  
+    const h1Ref = useRef(null)  
+    useEffect(() => {    
+        console.log(h1Ref)  
+    },[])  
+    return (    
+        <div>      
+            <h1 ref={ h1Ref }>this is h1</h1>    
+        </div>  
+    )
+}
+export default App
+```
+
+**获取组件实例**
+> **函数组件由于没有实例,故不能通过ref进行获取.**
+
+```JSX
+class Foo extends React.Component {  
+    sayHi = () => {    
+        console.log('say hi')  
+    }  
+    render(){    
+        return <div>Foo</div>  
+    }
+}
+    
+export default Foo
+```
+```JSX
+import { useEffect, useRef } from 'react'
+import Foo from './Foo'
+function App() {  
+    const h1Foo = useRef(null)  
+    useEffect(() => {    
+        console.log(h1Foo)  
+    }, [])  
+    return (    
+        <div> <Foo ref={ h1Foo } /></div>  
+    )
+}
+export default App
+```
 
 ### useContext
+> 对于传统的Provider和Consumer的代替.
+**实现步骤**
+1. 使用`createContext`创建Context对象.
+2. 在顶层组件中通过`Provider`提供数据.
+3. 在底层组件中通过`useContext`函数获取数据.
 
+**代码实现**
+```JSX
+import { createContext, useContext } from 'react'
+// 创建Context对象
+const Context = createContext()
 
+function Foo() {  
+    return <div>Foo <Bar/></div>
+}
+
+function Bar() {  
+    // 底层组件通过useContext函数获取数据  
+    const name = useContext(Context)  
+    return <div>Bar {name}</div>
+}
+
+function App() {  
+    return (    
+        // 顶层组件通过Provider 提供数据    
+        <Context.Provider value={'this is name'}>     
+            <div><Foo/></div>    
+        </Context.Provider>  
+    )
+}
+
+export default App
+```
 
 # React Router
+## 前置知识
+### 1. 单页应用
+> 只有一个html文件  主流的开发模式变成了通过路由进行页面切换 优势: 避免整体页面刷新  用户体验变好.
 
-# Mobox
+### 2. 路由本质
+> 概念来源于后端 : 一个路径表示匹配一个服务器资源   /a.html   -> a对应的文件资源  /b.html -> b对应的文件资源<br/>
+> 共同思想：一对一关系。<br/>
+> 前端路由：一个路径path对应唯一一个组件component，当访问path时，自动将oath对应组件进行渲染。
+```JS
+const routes = [
+  {
+    path:'/home',
+    component: Home
+  },
+   {
+    path:'/about',
+    component: About
+  },
+   {
+    path:'/article',
+    component: Article
+  }
+]
+```
 
-# Redux
+## 准备项目环境
+> `create-react-app` -> `cra` -> `webpack`
+```bash
+# 创建react项目
+$ yarn create vite react-router --template react
 
+# 安装所有依赖包
+$ yarn
+
+# 启动项目
+$ yarn dev
+
+# 安装react-router包
+$ yarn add react-router-dom@6
+```
+
+## 基础使用
+```JSX
+// 引入必要的内置组件
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+
+// 准备俩个路由组件
+
+const Home = () => <div>this is home</div>
+const About = () => <div>this is about</div>
+
+function App() {
+  return (
+    <div className="App">
+      {/* 按照规则配置路由 */}
+      <BrowserRouter>
+        <Link to="/">首页</Link>
+        <Link to="/about">关于</Link>
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/about" element={<About />}></Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  )
+}
+
+export default App
+```
+
+## 核心组件
+### 1. BrowserRouter
+> **作用：包裹整个应用，一个React应用只需要使用一次。**
+
+| 模式 | 实现方式 | 路由url表现 |
+| - | :-: | -: |
+| HashRouter | 监听url hash值实现| http://localhost:3000/#/about |
+| BrowerRouter | H5的 history.pushState实现 | http://localhost:3000/about |
+
+
+* 类似与Vue中的路由模式
+  ```js
+  import { createRouter, createWebHashHistory } from 'vue-router'
+
+  const router = createRouter({
+    history: createWebHashHistory(), // hash模式
+    history: createWebHistory(), // history模式
+    routes: [
+    //...
+    ],
+  })
+  ```
+
+### 2. Link
+> **作用：用于指定导航链接。完成声明式路由跳转，类似于`router-link`**
+![Link](/blog/img_react/router1.png)
+**to属性用于指定路由地址，表示跳转位置，Link组件最终会被渲染成原生的a标签。**
+
+### 3. Routes
+> **作用：提供一个路由出口，组件内部会存在多个内置的Routes组件，满足条件的路由会被渲染到组件内部。类似于`router-view`**
+![Routes](/blog/img_react/router2.png)
+
+### 4. Route
+> **作用：用于定义路由路径和渲染组件的对应关系。**
+![Route](/blog/img_react/router3.png)
+**其中path属性用来指定匹配的路径地址，element属性指定要渲染的组件。**
+
+## 编程式导航
+> **声明式 【Link to】  vs  编程式 【调用路由方法进行路由跳转】**<br/>
+**概念：**
+* 通过js编程的方式进行路由页面跳转。
+* 核心：useNavigate函数。
+
+**实现步骤**
+1. 导入`useNavigate`钩子函数
+2. 执行`useNavigate`函数得到跳转函数。
+3. 在事件中执行跳转函数完成路由跳转。
+```JSX
+import { useNavigate } from 'react-router-dom'
+
+const Home = () => {
+  const navigate = useNavigate()
+  return (
+    <>
+      Home
+      <button onClick={()=>navigate('/about')}>跳转至about页</button>
+    </>
+  )
+}
+
+export default Home
+```
+
+**如果在跳转时不想添加历史记录，则设置`replace`属性为true**
+```JSX
+<button onClick={()=>navigate("/about", {replace: true})}></button>
+```
+
+
+## 路由传参
+### 1. searchParams传参
+#### 路由传参
+```JS
+navigate('/about?id=1001')
+```
+
+#### 路由取参
+```JS
+let [params] = useSearchParams()
+let id = params.get('id')
+```
+
+### 2. params传参
+#### 路由传参
+```JS
+navigate('/about/1001')
+```
+
+#### 路由取参
+```JS
+let params = useParams()
+let id = params.id
+```
+
+## 嵌套路由
+* **直接在Route中继续嵌套Route即可。**
+* **注意这里进行渲染出口，使用`Outlet`作为出口标识。** 类似于vue中的`router-view`
+
+**示例代码**
+```JSX
+<Routes>
+  <Route path="/"  element={<Layout/>}>
+    <Route path="board" element={ <Board/> } />
+    <Route path="article" element={ <Article/> } />
+  </Route>
+   { /* 省略部分  */ }
+</Routes>
+```
+```JSX
+import { Outlet } from 'react-router-dom'
+
+const Layout = () => {
+  return (
+    <div>
+      layout
+      { /* 二级路由的path等于 一级path + 二级path  */ }
+      <Link to="/board">board</Link>
+      <Link to="/article">article</Link>
+      { /* 二级路由出口 */ }
+      <Outlet/>
+    </div>
+  )
+}
+export default Layout
+```
+
+## 默认二级路由
+> **即首次渲染时展示的二级路由，在vue中使用`redirect`进行操作。**
+**react中使用`index`属性进行操作。**
+```JSX
+<Routes>
+  <Route path="/"  element={<Layout/>}>
+    <Route index element={ <Board/> } />
+    <Route path="article" element={ <Article/> } />
+  </Route>
+</Routes>
+
+import { Outlet } from 'react-router-dom'
+
+const Layout = () => {
+  return (
+    <div>
+      layout
+      { /* 默认二级不再具有自己的路径  */ }
+      <Link to="/">board</Link>
+      <Link to="/article">article</Link>
+      { /* 二级路由出口 */ }
+      <Outlet/>
+    </div>
+  )
+}
+```
+**默认进行渲染的二级路由在添加上index属性后，不需要写入自己的路径。to属性不再需要。**
+
+## 404路由配置
+> **即路由匹配规则到`*`时进行特殊处理。**
+```JSX
+const NotFound = () => {
+  return <div>this is NotFound</div>
+}
+
+export default NotFound
+```
+
+```JSX
+<BrowserRouter>
+  <Routes>
+    <Route path="/" element={<Layout />}>
+      <Route index element={<Board />} />
+      <Route path="article" element={<Article />} />
+    </Route>
+    <Route path="*" element={<NotFound />}></Route>
+  </Routes>
+</BrowserRouter>
+```
+
+## 集中式路由配置
+> **整体配置路由的一些配置项，创建一个路由数组定义所有的路由对于关系。再使用`useRoutes`方法生成Routes组件，最后使用Routes组件代替之前的Routes组件。**
+```JSX
+import { BrowserRouter, Routes, Route, useRoutes } from 'react-router-dom'
+
+import Layout from './pages/Layout'
+import Board from './pages/Board'
+import Article from './pages/Article'
+import NotFound from './pages/NotFound'
+
+// 1. 准备一个路由数组 数组中定义所有的路由对应关系
+const routesList = [
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        element: <Board />,
+        index: true, // index设置为true 变成默认的二级路由
+      },
+      {
+        path: 'article',
+        element: <Article />,
+      },
+    ],
+  },
+  // 增加n个路由对应关系
+  {
+    path: '*',
+    element: <NotFound />,
+  },
+]
+
+// 2. 使用useRoutes方法传入routesList生成Routes组件
+function WrapperRoutes() {
+  let element = useRoutes(routesList)
+  return element
+}
+
+function App() {
+  return (
+    <div className="App">
+      <BrowserRouter>
+        {/* 3. 替换之前的Routes组件 */}
+        <WrapperRoutes />
+      </BrowserRouter>
+    </div>
+  )
+}
+
+export default App
+```
