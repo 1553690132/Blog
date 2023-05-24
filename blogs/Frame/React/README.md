@@ -1472,10 +1472,10 @@ export default App
 ### 1. BrowserRouter
 > **作用：包裹整个应用，一个React应用只需要使用一次。**
 
-| 模式 | 实现方式 | 路由url表现 |
-| - | :-: | -: |
-| HashRouter | 监听url hash值实现| http://localhost:3000/#/about |
-| BrowerRouter | H5的 history.pushState实现 | http://localhost:3000/about |
+| 模式         |          实现方式          |                   路由url表现 |
+| ------------ | :------------------------: | ----------------------------: |
+| HashRouter   |     监听url hash值实现     | http://localhost:3000/#/about |
+| BrowerRouter | H5的 history.pushState实现 |   http://localhost:3000/about |
 
 
 * 类似与Vue中的路由模式
@@ -1696,3 +1696,176 @@ function App() {
 
 export default App
 ```
+
+## 重定向Navigate
+> **Navigate组件被渲染，就会修改路径，切换视图。**
+```JSX
+import React,{useState} from 'react'
+import {Navigate} from 'react-router-dom'
+
+export default function Home() {
+	const [sum,setSum] = useState(1)
+	return (
+		<div>
+			<h3>我是Home的内容</h3>
+			{/* 根据sum的值决定是否切换视图 */}
+			{sum === 1 ? <h4>sum的值为{sum}</h4> : <Navigate to="/about" replace={true}/>}
+			<button onClick={()=>setSum(2)}>点我将sum变为2</button>
+		</div>
+	)
+}
+```
+
+
+## ReactRouter6的hooks
+**一般在index.js中最外层包裹`<BrowserRouter>`。**
+```JSX
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import { BrowserRouter } from 'react-router-dom'
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(
+  <BrowserRouter>
+    <App/>
+  </BrowserRouter>
+)
+```
+
+### useRoutes
+**设置路由表，动态创建`<Routes>`和`<Route>`**
+```JSX
+//路由表配置：src/routes/index.js
+import About from '../pages/About'
+import Home from '../pages/Home'
+import {Navigate} from 'react-router-dom'
+
+export default [
+	{
+		path:'/about',
+		element:<About/>
+	},
+	{
+		path:'/home',
+		element:<Home/>
+	},
+	{
+		path:'/',
+		element:<Navigate to="/about"/>
+	}
+]
+
+//App.jsx
+import React from 'react'
+import {NavLink,useRoutes} from 'react-router-dom'
+import routes from './routes'
+
+export default function App() {
+	//根据路由表生成对应的路由规则
+	const element = useRoutes(routes)
+	return (
+		<div>
+			......
+      {/* 注册路由 */}
+      {element}
+		  ......
+		</div>
+	)
+}
+
+```
+
+### useNativate
+**返回一个函数来实现--编程式导航。**
+```JSX
+import React from 'react'
+import {useNavigate} from 'react-router-dom'
+
+export default function Demo() {
+  const navigate = useNavigate()
+  const handle = () => {
+    //第一种使用方式：指定具体的路径
+    navigate('/login', {
+      replace: false,
+      state: {a:1, b:2}
+    }) 
+    //第二种使用方式：传入数值进行前进或后退，类似于5.x中的 history.go()方法
+    navigate(-1)
+  }
+  
+  return (
+    <div>
+      <button onClick={handle}>按钮</button>
+    </div>
+  )
+}
+```
+
+### useParams
+**返回当前匹配路由的`params`参数。**
+```JSX
+import React from 'react';
+import { Routes, Route, useParams } from 'react-router-dom';
+import User from './pages/User.jsx'
+
+function ProfilePage() {
+  // 获取URL中携带过来的params参数
+  let { id } = useParams();
+}
+
+function App() {
+  return (
+    <Routes>
+      <Route path="users/:id" element={<User />}/>
+    </Routes>
+  );
+}
+```
+
+### useSearchParams
+**用于读取和修改当前页面的URL中的查询字符串。**
+```JSX
+import React from 'react'
+import {useSearchParams} from 'react-router-dom'
+
+export default function Detail() {
+	const [search,setSearch] = useSearchParams()
+	const id = search.get('id')
+	const title = search.get('title')
+	const content = search.get('content')
+	return (
+		<ul>
+			<li>
+				<button onClick={()=>setSearch('id=008&title=哈哈&content=嘻嘻')}>点我更新一下收到的search参数</button>
+			</li>
+			<li>消息编号：{id}</li>
+			<li>消息标题：{title}</li>
+			<li>消息内容：{content}</li>
+		</ul>
+	)
+}
+```
+
+### useLocation
+**获取当前路由的`location`信息。**
+```JSX
+
+```
+
+### useMatch
+**返回当前的匹配信息。**
+
+### useOutlet
+**呈现当前组件中渲染的嵌套路由。**
+
+### useInRouterContext
+**如果当前组件在`<Router>`的上下文中呈现，则该函数返回true。**
+
+### useNavigationType
+1. **作用：返回当前的导航类型。（即用户是通过何种方式来到该页面。）**
+2. **返回值：`PUSH`、`POP`、`REPLACE`**
+3. **备注：`POP`指在浏览器中直接打开了这个路由组件。**
+
+### useResolvedPAth
+**给定URL值，解析其中的`path`、`search`、`hash`值。**
